@@ -1,0 +1,66 @@
+<style lang="scss">
+.header-top {
+    height: 100px;
+    box-sizing: border-box;
+    padding: 15px;
+    background-color: #141414;
+    position: relative;
+    .user {
+        background-color: #141414;
+        display: flex;
+        justify-content: flex-start;
+        image {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        text {
+            position: relative;
+            top: 27px;
+            color: white;
+            font-family: 'SimHei';
+        }
+    }
+}
+</style>
+<template>
+    <view class="header-top">
+        <view class="user">
+            <image src="{{userInfo.avatarUrl}}"></image>
+            <text>{{userInfo.nickName}}</text>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class header extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+        userInfo: {
+
+        }
+    };
+    methods = {
+    };
+
+    async onLoad() {
+        console.log('classify-header');
+        try {
+            let userInfo = await wepy.getStorage({
+                key: 'userInfo',
+            });
+            this.userInfo = userInfo.data;
+            this.$apply();
+        } catch (error) {
+            wepy.showModal({
+                title: '提示',
+                content: `授权失败，请重新打开并确定授权已获得更好的体验(*^__^*) .`
+            });
+        }
+    }
+}
+</script>

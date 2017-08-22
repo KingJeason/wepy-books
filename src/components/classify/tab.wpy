@@ -1,0 +1,54 @@
+<style lang="scss">
+.classify-tab {
+    height: 39px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid lightgray;
+    background-color: #141414!important;
+    .tab-item {
+        background-color: #141414!important;
+
+        flex-grow: 1;
+        text-align: center;
+        font-size: 16px;
+        font-family: 'SimHei';
+        padding: 10px;
+        line-height: 16px;
+        color: lightgray;
+    }
+    .tab-hover {
+        color: #fff;
+        border-bottom: 2px solid #fff;
+    }
+}
+</style>
+<template>
+    <view class="classify-tab">
+        <view bindtap="wtf" data-type="a" class="tab-item {{class[0]}}">文学</view>
+        <view bindtap="wtf" data-type="b" class="tab-item {{class[1]}}">流行</view>
+        <view bindtap="wtf" data-type="c" class="tab-item {{class[2]}}">文化</view>
+        <view bindtap="wtf" data-type="d" class="tab-item {{class[3]}}">生活</view>
+        <view bindtap="wtf" data-type="e" class="tab-item {{class[4]}}">经管</view>
+        <view bindtap="wtf" data-type="f" class="tab-item {{class[5]}}">科技</view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class tab extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+        class: ['tab-hover', '', '', '', '', '', '']
+
+    };
+    methods = {
+    };
+
+    onLoad() {
+        console.log('classify-tab');
+    }
+}
+</script>

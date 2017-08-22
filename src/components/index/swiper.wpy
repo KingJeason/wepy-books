@@ -25,15 +25,16 @@
 
         data = {
             imgUrls: [
-                '../../resources/images/swiper1.jpg',
-                '../../resources/images/swiper2.jpg',
-                '../../resources/images/swiper3.jpg',
+                '../resources/images/swiper1.jpg',
+                '../resources/images/swiper2.jpg',
+                '../resources/images/swiper3.jpg',
             ]
         };
         methods = {
         };
 
         onLoad () {
+            console.log('index-swiper');
         }
     }
 </script>

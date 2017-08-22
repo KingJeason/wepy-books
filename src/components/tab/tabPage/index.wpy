@@ -29,5 +29,8 @@ export default class Message extends wepy.component {
 
     methods = {
     };
+    onLoad () {
+        console.log('index');
+    }
 }
 </script>

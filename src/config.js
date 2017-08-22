@@ -47,6 +47,10 @@ const api = {
         recommend: {
             method: 'GET',
             url: '/findEveryDayBooks/'
+        },
+        classify: {
+            method: 'GET',
+            url: '/findBookTypeById/'
         }
     },
     blog: {

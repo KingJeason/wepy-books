@@ -30,10 +30,10 @@
 <template>
     <view class="search">
         <view class="header-query">
-            <image class="icon" src="../../resources/icons/query.png" bindtap="gotoquery"></image>
+            <image class="icon" src="../resources/icons/query.png" bindtap="gotoquery"></image>
             <text bindtap="gotoquery">点击搜索</text>
         </view>
-        <image bindtap="saoyisao" class="icon" src="../../resources/icons/saoyisao.png"></image>
+        <image bindtap="saoyisao" class="icon" src="../resources/icons/saoyisao.png"></image>
     </view>
 </template>
 <script>
@@ -47,6 +47,7 @@ export default class search extends wepy.component {
     };
 
     onLoad() {
+        console.log('index-search');
     }
 }
 </script>

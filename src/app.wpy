@@ -15,8 +15,7 @@ export default class extends wepy.app {
 
     config = {
         'pages': [
-            'pages/index',
-            'pages/chat'
+            'pages/index'
         ],
         'window': {
             'backgroundTextStyle': 'light',
@@ -26,13 +25,14 @@ export default class extends wepy.app {
         }
     };
 
-    constructor () {
+    constructor() {
         super();
         this.use('promisify');
         this.use('requestfix');
     }
 
-    async onLoad() {
+    async onLaunch() {
+        console.log('appLaunch');
         try {
             await interfaces.login();
         } catch (error) {

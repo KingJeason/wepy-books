@@ -141,6 +141,7 @@ export default class recommend extends wepy.component {
     };
 
     async onLoad() {
+        console.log('index-recommend');
         try {
             // 获取每日推荐
             let recommend = await wepy.request({

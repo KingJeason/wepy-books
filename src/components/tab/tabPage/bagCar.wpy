@@ -2,9 +2,7 @@
 
 </style>
 <template>
-    <view>
-        3
-    </view>
+
 </template>
 <script>
     import wepy from 'wepy';
@@ -19,6 +17,7 @@
         };
 
         onLoad () {
+            console.log('bagCar');
         }
     }
 </script>

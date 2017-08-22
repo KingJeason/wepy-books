@@ -1,66 +1,67 @@
 <style lang="scss">
-.hotbooks{
-    background-color: white;;
-}
-.item {
-    border-bottom: 1px solid lightgray;
-    margin-bottom: 20px;
-    .header {
-        color: darkorange;
-        border-left: 4px solid orange;
-        font-family: 'SimHei';
-        padding-left: 10px;
-        font-size: 15px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        position: relative;
-        image {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            top: -7px;
-            left: 50px;
+.hotbooks {
+    background-color: white;
+    .item {
+        border-bottom: 1px solid lightgray;
+        margin-bottom: 20px;
+        .header {
+            color: darkorange;
+            border-left: 4px solid orange;
+            font-family: 'SimHei';
+            padding-left: 10px;
+            font-size: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            image {
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                top: -7px;
+                left: 50px;
+            }
         }
-    }
-    .book-list {
-        display: flex;
-        padding: 15px 15px 20px 15px;
-        justify-content: space-around;
-        image {
-            width: 100px;
-            height: 150px;
-            margin-left: 15px;
-        }
-        .book-info {
+        .book-list {
             display: flex;
-            flex-direction: column;
-            .book-info-header {
+            padding: 15px 15px 20px 15px;
+            justify-content: space-around;
+            image {
+                width: 100px;
+                height: 150px;
+                margin-left: 15px;
+            }
+            .book-info {
                 display: flex;
-                flex: 1;
-                height: 100%;
                 flex-direction: column;
-                width: 70%;
-                >text:first-child {
-                    font-family: 'SimHei';
-                    font-weight: bold;
-                    margin-bottom: 10px;
+                width: 60%;
+                .book-info-header {
+                    display: flex;
+                    flex: 1;
+                    height: 100%;
+                    flex-direction: column;
+                    width: 70%;
+                    >text:first-child {
+                        font-family: 'SimHei';
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    >text:nth-child(2) {
+                        font-size: 14px;
+                        color: grey;
+                        margin-bottom: 15px;
+                        line-height: 20px;
+                    }
+                    >text:nth-child(3) {
+                        color: lightgray;
+                        margin-bottom: 10px;
+                        font-size: 12px;
+                    }
                 }
-                >text:nth-child(2) {
-                    font-size: 14px;
-                    color: grey;
-                    margin-bottom: 15px;
-                    line-height: 20px;
-                }
-                >text:nth-child(3) {
+                .book-list-footer {
                     color: lightgray;
                     margin-bottom: 10px;
                     font-size: 12px;
                 }
-            }
-            .book-list-footer {
-                color: lightgray;
-                margin-bottom: 10px;
-                font-size: 12px;
             }
         }
     }
@@ -101,6 +102,7 @@ export default class rank extends wepy.component {
     };
 
     async onLoad() {
+        console.log('index-rank');
         try {
             // 获取热门图书
             let hootBooks = await wepy.request({

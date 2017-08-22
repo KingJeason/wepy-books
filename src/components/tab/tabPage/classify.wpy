@@ -1,28 +1,45 @@
-<style type="scss">
-
+<style lang="scss">
 </style>
 <template>
     <view>
-        2
+        <userHeader />
+        <tab />
+        <classifyBook />
+        <fuck />
     </view>
 </template>
 <script>
-    import wepy from 'wepy';
+import wepy from 'wepy';
+import header from '../../classify/header';
+import tab from '../../classify/tab';
+import classifyBook from '../../classify/classifyBook';
+import fuck from '../../classify/fuck';
+export default class Message extends wepy.component {
 
-    export default class Message extends wepy.component {
+    components = {
+        userHeader: header,
+        tab,
+        classifyBook,
+        fuck
+    };
 
-        components = {
-        };
+    data = {
 
-        data = {
+    };
+    methods = {
 
-        };
-        methods = {
+    };
 
-        };
+    async onLoad() {
+        console.log('classify');
+        try {
 
-        onLoad () {
-
+        } catch (error) {
+            wepy.showModal({
+                title: '提示',
+                content: `获取分类图书失败，请关闭重新进入.`
+            });
         }
     }
+}
 </script>

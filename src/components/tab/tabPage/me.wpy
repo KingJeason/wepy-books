@@ -1,33 +1,29 @@
 <style type="scss">
+.a {
+    background: black;
+}
 </style>
 <template>
-    <view>
+    <view class='a'>
         4
     </view>
 </template>
 <script>
-    import wepy from 'wepy';
-    import interfaces from '../../../interfaces';
-    export default class Me extends wepy.component {
+import wepy from 'wepy';
+// import interfaces from '../../../interfaces';
+export default class Me extends wepy.component {
 
-        components = {
-        }
-
-        data = {
-        };
-
-        methods = {
-        };
-
-        async onLoad() {
-            try {
-                await interfaces.login();
-            } catch (error) {
-                wepy.showModal({
-                    title: '提示',
-                    content: `用户登录失败，请截图本提示，并联系1503268691@qq.com`
-                });
-            }
-        }
+    components = {
     }
+
+    data = {
+    };
+
+    methods = {
+    };
+    async onLoad() {
+        console.log('me');
+
+    }
+}
 </script>

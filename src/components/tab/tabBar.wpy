@@ -1,11 +1,12 @@
-<style type="scss">
+<style lang="scss">
     $fontcolor: #7b7b7b;
     $activecolor: #13b113;
     .tab {
+        box-sizing: border-box;
         color: $fontcolor;
         position: fixed;
         bottom: 0;
-        height: 100rpx;
+        height: 51px;
         width: 100%;
         border-top: 1px solid #dad9d6;
         background-color: #f7f7f7;
@@ -71,6 +72,7 @@
         };
 
         onLoad () {
+            console.log('tabBar');
         }
     }
 </script>
