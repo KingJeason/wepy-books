@@ -1,0 +1,28 @@
+<style type="scss">
+
+</style>
+<template>
+    <view>
+        2
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+
+    export default class Message extends wepy.component {
+
+        components = {
+        };
+
+        data = {
+
+        };
+        methods = {
+
+        };
+
+        onLoad () {
+
+        }
+    }
+</script>

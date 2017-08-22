@@ -1,0 +1,66 @@
+<style type="scss">
+.tab_item {
+    height: 100%
+}
+
+page,
+.body {
+    height: 100%;
+    font-family: '\5FAE\8F6F\96C5\9ED1', arial;
+    background-color: #f0eff5;
+}
+</style>
+<template>
+    <view class="body">
+        <view class="tab_item tab_message" hidden="{{currentTab != 0}}">
+            <index />
+        </view>
+        <view class="tab_item tab_contact" hidden="{{currentTab != 1}}">
+            <classify />
+        </view>
+        <view class="tab_item tab_discovery" hidden="{{currentTab != 2}}">
+            <bagcar />
+        </view>
+        <view class="tab_item tab_me" hidden="{{currentTab != 3}}">
+            <me />
+        </view>
+
+        <tab :active.sync="currentTab" />
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import index from '../components/tab/tabPage/index';
+import classify from '../components/tab/tabPage/classify';
+import bagcar from '../components/tab/tabPage/bagCar';
+import me from '../components/tab/tabPage/me';
+import tab from '../components/tab/tabBar';
+export default class Index extends wepy.page {
+    config = {
+        'navigationBarTitleText': '首页',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#3b3a40'
+    };
+
+    components = {
+        index,
+        classify,
+        bagcar,
+        me,
+        tab
+    };
+
+    data = {
+        currentTab: 0
+    };
+
+    methods = {
+    };
+
+    onShow() {
+        this.currentTab = 0;
+    }
+
+}
+</script>

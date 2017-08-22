@@ -1,0 +1,163 @@
+<style lang="scss">
+.serie {
+    background-color: #e6e6e6;
+    margin-bottom: 51px;
+    .serie-header {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 10px;
+        background-color: #e6e6e6;
+        .serie-icon {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top: 12px;
+            right: 0;
+        }
+        >text:first-child {
+            margin-top: 10px;
+            border-left: 4px solid deepskyblue;
+            font-family: 'SimHei';
+            padding-left: 10px;
+            font-size: 15px;
+        }
+        >text:nth-child(2) {
+            color: darkgray;
+            margin-top: 10px;
+            padding-right: 10px;
+            font-size: 15px;
+            font-family: 'SimHei';
+        }
+    }
+    .bookview {
+        background-color: #e6e6e6;
+        white-space: nowrap;
+        padding: 10px;
+    }
+    scroll-view {
+        height: 340px;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+    .item {
+        text {
+            font-size: 12px;
+            color: darkgrey;
+            margin-bottom: 10px;
+            font-family: 'SimHei';
+        }
+        width: 50%;
+        border-radius: 10px;
+        background-color: white;
+        margin-right: 15px;
+        overflow: hidden;
+        display: inline-block;
+        .item-img {
+            width: 100%;
+            height: 160px;
+            margin-right: 15px;
+        }
+        .item-intro {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            .bookimgurl {
+                font-size: 16px;
+                font-family: 'SimHei';
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .author_info {
+                display: flex;
+                .author_img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    margin-bottom: 10px;
+                    margin-right: 20px;
+                }
+                .item-info1 {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+            .booklistend {
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid lawngreen;
+                text-align: center;
+                font-family: 'SimHei';
+                font-size: 15px;
+                font-weight: bold;
+                padding: 5px;
+                color: lawngreen;
+                box-sizing: border-box;
+            }
+        }
+    }
+}
+</style>
+<template>
+    <view class="serie">
+        <view class="serie-header">
+            <text>今日推荐</text>
+            <text></text>
+            <image class="serie-icon" src="../../resources/icons/right3.png"></image>
+        </view>
+        <view class="bookview">
+            <scroll-view scroll-x="true">
+                <block wx:for="{{recommendBooks}}" wx:key="index">
+                    <view class="item">
+                        <image class="item-img" mode="" src="{{item.imageurl}}" bindtap="gotodetail" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}"></image>
+                        <view class="item-intro">
+                            <view class="bookimgurl">{{item.name}}</view>
+                            <text>库存:{{item.count}}本</text>
+                            <view class="author_info">
+                                <image mode="aspectFit" class="author_img" src="{{item.imageurl}}" bindtap="gotodetail" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}"></image>
+                                <view class="item-info1">
+                                    <text>{{item.author}}</text>
+                                    <text>{{item.publish}}</text>
+                                </view>
+                            </view>
+                            <view class="booklistend" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}" bindtap="gotodetail">点击查看</view>
+                        </view>
+                    </view>
+                </block>
+            </scroll-view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+import { api } from '../../config';
+export default class recommend extends wepy.component {
+
+    data = {
+        recommendBooks: []
+    };
+    methods = {
+    };
+
+    async onLoad() {
+        try {
+            // 获取每日推荐
+            let recommend = await wepy.request({
+                url: api.common.recommend.url,
+                method: api.common.recommend.method,
+                dataType: 'json',
+                data: {
+                }
+            });
+            this.recommendBooks = recommend.data.books;
+            this.$apply();
+        } catch (error) {
+            wepy.showModal({
+                title: '提示',
+                content: `获取每日推荐失败，请关闭重新进入.`
+            });
+        }
+    }
+}
+</script>

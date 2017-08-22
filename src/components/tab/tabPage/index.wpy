@@ -1,0 +1,33 @@
+<style lang="scss">
+   view{
+       background-color: white;
+   }
+</style>
+<template>
+    <view>
+        <search />
+        <topSwiper />
+        <rank />
+        <recommend />
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+import swiper from '../../index/swiper';
+import rank from '../../index/rank';
+import recommend from '../../index/recommend';
+import search from '../../index/search';
+export default class Message extends wepy.component {
+    components = {
+        topSwiper: swiper,
+        rank,
+        recommend,
+        search
+    };
+    data = {
+    };
+
+    methods = {
+    };
+}
+</script>

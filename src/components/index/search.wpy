@@ -1,0 +1,52 @@
+<style lang="scss">
+.search {
+    background-color: #141414;
+    height: 40px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    .icon {
+        width: 40px;
+        height: 40px;
+    }
+    .header-query {
+        width: 80%;
+        background-color: white;
+        border-radius: 5px;
+        padding: 3px;
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+        align-items: center;
+        text {
+            font-size: 15px;
+            font-family: 'SimHei';
+            color: #EDEDED;
+            flex: 1;
+        }
+    }
+}
+</style>
+<template>
+    <view class="search">
+        <view class="header-query">
+            <image class="icon" src="../../resources/icons/query.png" bindtap="gotoquery"></image>
+            <text bindtap="gotoquery">点击搜索</text>
+        </view>
+        <image bindtap="saoyisao" class="icon" src="../../resources/icons/saoyisao.png"></image>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class search extends wepy.component {
+
+    data = {
+
+    };
+    methods = {
+    };
+
+    onLoad() {
+    }
+}
+</script>

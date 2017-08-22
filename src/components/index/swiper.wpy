@@ -1,0 +1,39 @@
+<style type="scss">
+    .swiper{
+        width: 100%;
+        height: 150px;
+        margin-bottom:20px;
+        .slide-image{
+            width: 100%;
+        }
+    }
+</style>
+<template>
+<view class="swiper">
+    <swiper indicator-dots="true" autoplay="true" circular="true">
+      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+        <swiper-item>
+          <image mode="scaleToFill" src="{{item}}" class="slide-image" />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    export default class swiper extends wepy.component {
+
+        data = {
+            imgUrls: [
+                '../../resources/images/swiper1.jpg',
+                '../../resources/images/swiper2.jpg',
+                '../../resources/images/swiper3.jpg',
+            ]
+        };
+        methods = {
+        };
+
+        onLoad () {
+        }
+    }
+</script>

@@ -1,0 +1,46 @@
+<style type='scss'>
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #f0eff5;
+}
+</style>
+
+<script>
+
+import wepy from 'wepy';
+import 'wepy-async-function';
+import interfaces from './interfaces';
+export default class extends wepy.app {
+
+    config = {
+        'pages': [
+            'pages/index',
+            'pages/chat'
+        ],
+        'window': {
+            'backgroundTextStyle': 'light',
+            'navigationBarBackgroundColor': '#3b3a40',
+            'navigationBarTitleText': 'WeChat',
+            'navigationBarTextStyle': 'black'
+        }
+    };
+
+    constructor () {
+        super();
+        this.use('promisify');
+        this.use('requestfix');
+    }
+
+    async onLoad() {
+        try {
+            await interfaces.login();
+        } catch (error) {
+            wepy.showModal({
+                title: '提示',
+                content: `用户登录失败，请截图本提示，并联系1503268691@qq.com`
+            });
+        }
+    }
+}
+</script>
