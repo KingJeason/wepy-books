@@ -7,8 +7,6 @@
 (http://www.cnsoftbei.com/bencandy.php?fid=148&aid=1532)
 
 
-![wepy](https://cloud.githubusercontent.com/assets/2182004/20709814/5d84db68-b672-11e6-8576-8f489e02dc4b.gif)
-
 ## 体验步骤
 ### 1. 安装 wepy
 本项目基于wepy开发，[参考这里](https://github.com/wepyjs/wepy)
