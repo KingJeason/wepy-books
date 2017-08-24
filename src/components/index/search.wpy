@@ -16,12 +16,17 @@
         padding: 3px;
         display: flex;
         position: relative;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
         text {
-            font-size: 15px;
+            text-align: center;
+            font-size: 12px;
             font-family: 'SimHei';
-            color: #EDEDED;
+            color: grey;
             flex: 1;
         }
     }
@@ -30,8 +35,8 @@
 <template>
     <view class="search">
         <view class="header-query">
-            <image class="icon" src="../resources/icons/query.png" bindtap="gotoquery"></image>
-            <text bindtap="gotoquery">点击搜索</text>
+            <image class="icon" src="../resources/icons/query.png" @tap="gotoquery"></image>
+            <text @tap="gotoquery">请输入关键词进行搜索</text>
         </view>
         <image bindtap="saoyisao" class="icon" src="../resources/icons/saoyisao.png"></image>
     </view>
@@ -44,6 +49,11 @@ export default class search extends wepy.component {
 
     };
     methods = {
+        gotoquery() {
+            this.$root.$navigate({
+                url: 'query'
+            });
+        }
     };
 
     onLoad() {

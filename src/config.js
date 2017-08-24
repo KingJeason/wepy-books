@@ -51,7 +51,12 @@ const api = {
         classify: {
             method: 'GET',
             url: '/findBookTypeById/'
-        }
+        },
+        search: {
+            method: 'GET',
+            url: '/findBooksByKey/'
+        },
+
     },
     blog: {
         list: {

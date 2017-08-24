@@ -38,7 +38,7 @@ import me from '../components/tab/tabPage/me';
 import tab from '../components/tab/tabBar';
 export default class Index extends wepy.page {
     config = {
-        'navigationBarTitleText': '首页',
+        'navigationBarTitleText': '求知微图书',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#3b3a40'
     };
@@ -63,6 +63,7 @@ export default class Index extends wepy.page {
     }
     onLoad() {
         console.log('index页面加载');
+        console.log(this.$root);
     }
 
 }
