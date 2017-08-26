@@ -1,0 +1,56 @@
+<style lang="scss">
+.operation {
+    box-sizing: border-box;
+    height: 20vh;
+    display: flex;
+    padding: 10%;
+    .unactive {
+        border: 1px solid yellow;
+        height: 20px;
+        padding: 12px;
+        font-size: 15px;
+        line-height: 20px;
+        color: #EEB422;
+        font-weight: bold;
+        margin-right: 20px;
+        border-radius: 5px;
+        flex: 1;
+        text-align: center;
+    }
+}
+</style>
+<template>
+    <view class="operation">
+        <view class="unactive">
+            收藏
+        </view>
+        <view class="unactive">
+            借阅
+        </view>
+        <view class="unactive">
+            预约
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class bookOperation extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+
+    };
+    methods = {
+    };
+    events = {
+        'bookData': (data) => {
+
+        }
+    }
+    onLoad() {
+        console.log('BookDetail-Operation');
+    }
+}
+</script>

@@ -1,0 +1,58 @@
+<style lang="scss">
+
+</style>
+<template>
+    <view>
+        <bookImage />
+        <bookInfo />
+        <bookOperation />
+        <bookDetailInfo />
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import bookImage from '../components/BookDetailPage/bookImage';
+import bookInfo from '../components/BookDetailPage/bookInfo';
+import bookOperation from '../components/BookDetailPage/bookOperation';
+import bookDetailInfo from '../components/BookDetailPage/bookDetailInfo';
+
+export default class BookDetail extends wepy.page {
+    config = {
+        'navigationBarTitleText': '书籍详情',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#3b3a40'
+    };
+
+    components = {
+        bookImage,
+        bookInfo,
+        bookOperation,
+        bookDetailInfo
+    };
+
+    data = {
+    };
+
+    methods = {
+    };
+
+    onShow() {
+    }
+    async onLoad(params) {
+        try {
+            let book = await wepy.request({
+                url: 'https://api.douban.com/v2/book/isbn/' + params.isbn,
+                header: {
+                    'Content-Type': 'json'
+                },
+            });
+            this.$broadcast('bookData', book.data, params.id, params.typeId);
+        } catch (error) {
+            console.log('豆瓣出错');
+        }
+        console.log('BookDetail页面加载');
+    }
+
+}
+</script>

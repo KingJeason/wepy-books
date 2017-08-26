@@ -95,13 +95,13 @@
 <template>
     <view class="queryTop">
         <view class="searchHeader">
-            <image class="icon" src="../resources/icons/left.png">
+            <image @tap="backToIndex" class="icon" src="../resources/icons/left.png">
             </image>
             <view class="input">
                 <input type="text" @input="inputChange" value='{{inputValue}}' placeholder="请输入关键字" placeholder-style=" color:#666666;font-size: 13px;font-family: 'SimHei';text-align:center">
                 <icon wx:if="{{clearShow}}" @tap="clearInput" class="clear" type="clear" size="30" />
             </view>
-            <button>搜索</button>
+            <button @tap="queryBook">搜索</button>
         </view>
         <view class="book-show" wx:if="{{clearShow}}">
             <view class="book-list">
@@ -128,7 +128,6 @@
 <script>
 import wepy from 'wepy';
 import { api } from '../../config';
-
 export default class search extends wepy.component {
 
     data = {
@@ -140,10 +139,10 @@ export default class search extends wepy.component {
     };
     methods = {
         inputChange(e) {
-            this.inputValue = e.detail.value;
+            this.inputValue = this.trim(e.detail.value);
             (e.detail.value !== '') ? this.clearShow = true : this.clearShow = false;
-            if (this.inputValue) {
-                console.log(this.inputValue)
+            if (this.trim(this.inputValue)) {
+                console.log(this.inputValue, '=inputValue');
                 this.throttle(this.findBooks, e.timestamp, 300, 500)();
                 this.lastTime = e.timestamp;
             }
@@ -153,10 +152,22 @@ export default class search extends wepy.component {
             this.clearShow = false;
             console.log('clear');
         },
+        queryBook() {
+            // console.log(this.$pages)
+            wepy.navigateTo({
+                url: 'bookList?searchValue=' + this.inputValue
+            });
+        },
+        backToIndex() {
+            wepy.navigateBack({
+                delta: 1
+            });
+        }
 
     };
     async findBooks() {
         try {
+
             let searchBooks = await wepy.request({
                 url: api.common.search.url + this.inputValue,
                 method: api.common.search.method
@@ -172,7 +183,7 @@ export default class search extends wepy.component {
     }
 
     async onLoad() {
-        console.log('queryPage-searchHearder')
+        console.log('queryPage-searchHearder');
     }
 
     throttle(method, time, delay, duration) {
@@ -192,6 +203,12 @@ export default class search extends wepy.component {
                 }, delay);
             }
         });
+    }
+    trim(str) {
+        if (str == null) {
+            str = '';
+        }
+        return str.replace(/(^\s*)|(\s*$)/g, '');
     }
 }
 </script>

@@ -110,18 +110,18 @@
             <scroll-view scroll-x="true">
                 <block wx:for="{{recommendBooks}}" wx:key="index">
                     <view class="item">
-                        <image class="item-img" mode="" src="{{item.imageurl}}" bindtap="gotodetail" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}"></image>
+                        <image class="item-img" mode="" src="{{item.imageurl}}" @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}')"></image>
                         <view class="item-intro">
                             <view class="bookimgurl">{{item.name}}</view>
                             <text>库存:{{item.count}}本</text>
                             <view class="author_info">
-                                <image mode="aspectFit" class="author_img" src="{{item.imageurl}}" bindtap="gotodetail" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}"></image>
+                                <image mode="aspectFit" class="author_img" src="{{item.imageurl}}" @tap="gotodetail" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}"></image>
                                 <view class="item-info1">
                                     <text>{{item.author}}</text>
                                     <text>{{item.publish}}</text>
                                 </view>
                             </view>
-                            <view class="booklistend" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}" bindtap="gotodetail">点击查看</view>
+                            <view class="booklistend" data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}" @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}')">点击查看</view>
                         </view>
                     </view>
                 </block>
@@ -138,6 +138,12 @@ export default class recommend extends wepy.component {
         recommendBooks: []
     };
     methods = {
+        gotodetail(isbn, typeId, id) {
+            console.log(isbn, typeId, id)
+            wepy.navigateTo({
+                url: 'bookDetail?isbn=' + isbn + '&typeId=' + typeId + '&id=' + id
+            });
+        }
     };
 
     async onLoad() {
@@ -147,6 +153,9 @@ export default class recommend extends wepy.component {
             let recommend = await wepy.request({
                 url: api.common.recommend.url,
                 method: api.common.recommend.method,
+                header: {
+                    'Content-Type': 'json'
+                },
                 dataType: 'json',
                 data: {
                 }

@@ -20,17 +20,18 @@
     .tab-hover {
         color: #fff;
         border-bottom: 2px solid #fff;
+        transition: color .5s ease .1s;
     }
 }
 </style>
 <template>
     <view class="classify-tab">
-        <view bindtap="wtf" data-type="a" class="tab-item {{class[0]}}">文学</view>
-        <view bindtap="wtf" data-type="b" class="tab-item {{class[1]}}">流行</view>
-        <view bindtap="wtf" data-type="c" class="tab-item {{class[2]}}">文化</view>
-        <view bindtap="wtf" data-type="d" class="tab-item {{class[3]}}">生活</view>
-        <view bindtap="wtf" data-type="e" class="tab-item {{class[4]}}">经管</view>
-        <view bindtap="wtf" data-type="f" class="tab-item {{class[5]}}">科技</view>
+        <view @tap="changeCurrent('a')" class="tab-item {{class[0]}}">文学</view>
+        <view @tap="changeCurrent('b')" class="tab-item {{class[1]}}">流行</view>
+        <view @tap="changeCurrent('c')" class="tab-item {{class[2]}}">文化</view>
+        <view @tap="changeCurrent('d')" class="tab-item {{class[3]}}">生活</view>
+        <view @tap="changeCurrent('e')" class="tab-item {{class[4]}}">经管</view>
+        <view @tap="changeCurrent('f')" class="tab-item {{class[5]}}">科技</view>
     </view>
 </template>
 <script>
@@ -45,6 +46,20 @@ export default class tab extends wepy.component {
 
     };
     methods = {
+        changeCurrent(currentTab) {
+            let num = currentTab.charCodeAt() - 97;
+            let arr = this.class;
+            for (var i = 0; i < arr.length; i++) {
+                if (i === num) {
+                    arr[i] = 'tab-hover';
+                } else {
+                    arr[i] = '';
+                }
+            }
+            this.class = arr;
+            this.$invoke('../classifyBook', 'changeCurrent', currentTab);
+
+        }
     };
 
     onLoad() {

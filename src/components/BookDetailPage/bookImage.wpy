@@ -1,0 +1,41 @@
+<style lang="scss">
+.bookImage {
+    box-sizing: border-box;
+    display: flex;
+    height: 50vh;
+    background-color: rgb(34, 16, 16);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .center {}
+}
+</style>
+<template>
+    <view class="bookImage">
+        <view class="center">
+            <image mode="aspectFit" class="book-image" src="{{book.image}}"></image>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class bookImage extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+        book: []
+    };
+    methods = {
+    };
+    events = {
+        'bookData': (data) => {
+            this.book = data;
+        }
+    }
+    onLoad() {
+        console.log('BookDetail-image');
+    }
+}
+</script>

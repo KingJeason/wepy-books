@@ -31,7 +31,6 @@ export default class Query extends wepy.page {
     }
     onLoad() {
         console.log('query页面加载');
-
     }
 
 }

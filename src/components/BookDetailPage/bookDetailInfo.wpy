@@ -1,0 +1,158 @@
+<style lang="scss">
+.detailInfo {
+    .summary {
+        font-family: 'SimHei';
+        font-size: 14px;
+        padding: 20px;
+        text:first-child {
+            color: #696969;
+            margin-bottom: 5px;
+        }
+        text:nth-child(2) {
+            line-height: 25px;
+        }
+    }
+    .author {
+        padding: 20px;
+        >text:first-child {
+            color: #696969;
+            font-size: 14px;
+            font-family: 'SimHei';
+            margin-bottom: 5px;
+        }
+        .author-detail {
+            display: flex;
+            text:first-child {
+                font-size: 14px;
+                font-family: 'SimHei';
+                line-height: 25px;
+                width: 90%;
+                height: 100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            image {
+                width: 20px;
+                height: 20px;
+                align-self: center;
+            }
+        }
+    }
+    .wrap_rel {
+        padding: 15px;
+        .rel_title {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'SimHei';
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .rel {
+            display: flex;
+            padding: 15px;
+            border: 1px solid #CFCFCF;
+            image {
+                width: 70px;
+                height: 100px;
+                margin-right: 15px;
+            }
+            .rel_info {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around
+            }
+            text:nth-child(1) {
+                font-family: 'SimHei';
+                font-size: 25px;
+                font-weight: bold;
+            }
+            text:nth-child(2) {
+                font-family: 'SimHei';
+                font-size: 14px;
+                color: #A3A3A3;
+            }
+            text:nth-child(3) {
+                font-family: 'SimHei';
+                font-size: 14px;
+                color: #A3A3A3;
+            }
+        }
+    }
+}
+</style>
+<template>
+    <view class="detailInfo">
+        <view class="summary" wx:if="{{book.summary}}">
+            <text>简介\n\n</text>
+            <text>{{book.summary}}</text>
+        </view>
+        <view bindtap="author_detail" class="author" wx:if="{{book.author_intro}}">
+            <text>作者简介\n\n</text>
+            <view class="author-detail">
+                <text>{{book.author_intro}}</text>
+                <image src="../../resources/icons/right.png"></image>
+            </view>
+
+        </view>
+        <view class="author" wx:if="{{book.catalog}}" bindtap="catalog_detail">
+            <text>目录\n\n</text>
+            <view class="author-detail">
+                <text>{{book.catalog}}</text>
+                <image src="../../resources/icons/right.png"></image>
+            </view>
+        </view>
+        <view class="wrap_rel">
+            <view class="rel_title">
+                <text>相关推荐</text>
+                <text bindtap="gotomore">点击更多</text>
+            </view>
+            <view class="rel">
+
+                <image src="{{relevantBook.books[0].imageurl}}"></image>
+                <view class="rel_info">
+                    <text>{{relevantBook.books[0].name}}</text>
+                    <text>作者: {{relevantBook.books[0].author}}</text>
+                    <text>出版社: {{relevantBook.books[0].publish}} </text>
+                </view>
+
+            </view>
+
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+import { api } from '../../config';
+export default class bookDetailInfo extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+        book: [],
+        relevantBook: []
+
+    };
+    methods = {
+    };
+    events = {
+        'bookData': async (book, id, typeId) => {
+            this.book = book;
+            try {
+                let relevantBook = await wepy.request({
+                    url: api.common.relevant.url + typeId,
+                    method: api.common.relevant.method
+                });
+                this.relevantBook = relevantBook.data;
+                this.$apply();
+            } catch (error) {
+                console.log('相关图书出错');
+            }
+        }
+    }
+    async onLoad() {
+
+        console.log('BookDetail-DetailInfo');
+    }
+}
+</script>

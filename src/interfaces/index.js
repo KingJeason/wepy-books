@@ -26,7 +26,6 @@ const interfaces = {
                 'userInfo': userinfoRaw.userInfo
 
             })
-            console.log('数据已存储到store')
 
         } catch (e) {
             wepy.showModal({

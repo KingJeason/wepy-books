@@ -108,6 +108,9 @@ export default class rank extends wepy.component {
             let hootBooks = await wepy.request({
                 url: api.common.hootBooks.url,
                 method: api.common.hootBooks.method,
+                header: {
+                    'Content-Type': 'json'
+                },
                 dataType: 'json',
                 data: {
                 }
@@ -124,6 +127,9 @@ export default class rank extends wepy.component {
                 content: `获取热门图书失败，请关闭重新进入.`
             });
         }
+    }
+    fuck() {
+
     }
 }
 </script>

@@ -1,0 +1,114 @@
+<style lang="scss">
+.bookList {
+    .item-list {
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid lightgray;
+        .item {
+            display: flex;
+            margin: 15px;
+        }
+        .left image {
+            width: 100px;
+            height: 120px;
+        }
+        .right {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            text:first-child {
+                font-family: 'SimHei';
+                font-weight: bold;
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            text:nth-child(2) {
+                font-family: 'SimHei';
+                font-size: 13px;
+                color: gray;
+            }
+            text:nth-child(3) {
+                font-family: 'SimeHei';
+                font-size: 13px;
+                color: gray;
+            }
+        }
+    }
+}
+</style>
+<template>
+    <view class="bookList">
+        <block wx:for="{{books}}" wx:index="{{index}}" wx:key="{{index}}">
+            <view class="item-list">
+                <view class="item" bindtap="gotodetail" data-index="{{index}}" data-typeid="{{item.typeId}}">
+                    <view class="left" data-index="{{index}}" data-typeid="{{item.typeId}}">
+                        <image src="{{item.imageurl}}" data-index="{{index}}" data-typeid="{{item.typeId}}"></image>
+                    </view>
+                    <view class="right" data-index="{{index}}" data-typeid="{{item.typeId}}">
+                        <text data-index="{{index}}" data-typeid="{{item.typeId}}">{{item.name}}</text>
+                        <text data-index="{{index}}" data-typeid="{{item.typeId}}">{{item.author}}</text>
+                        <text data-index="{{index}}" data-typeid="{{item.typeId}}"> {{item.publish}}</text>
+                    </view>
+                </view>
+            </view>
+        </block>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { api } from '../config';
+export default class BookList extends wepy.page {
+    config = {
+        'navigationBarTitleText': '详情',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#3b3a40'
+    };
+
+    components = {
+    };
+
+    data = {
+        books: []
+    };
+
+    methods = {
+    };
+
+    onShow() {
+    }
+    async onLoad(params, data) {
+        let books = [];
+        try {
+            if (params.searchValue) {
+                console.log('search逻辑');
+                books = await wepy.request({
+                    url: api.common.search.url + params.searchValue,
+                    method: api.common.search.methodk,
+                    header: {
+                        'Content-Type': 'json'
+                    },
+                });
+                wepy.setNavigationBarTitle({
+                    title: '搜索: ' + params.searchValue
+                });
+            } else if (params.classifyId) {
+                books = await wepy.request({
+                    url: api.common.classifyById.url + params.classifyId,
+                    method: api.common.classifyById.method,
+                    header: {
+                        'Content-Type': 'json'
+                    },
+                });
+            }
+            this.books = books.data.books;
+            this.$apply();
+        } catch (error) {
+            console.log('bookList出错');
+        }
+
+    }
+    async
+
+}
+</script>

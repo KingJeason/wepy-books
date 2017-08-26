@@ -37,7 +37,7 @@
 </style>
 <template>
     <view>
-        <scroll-view class="classifybook-view" scroll-into-view="{{into_view}}" scroll-y="true" style="height: calc(100vh - 190px);">
+        <scroll-view class="classifybook-view" scroll-into-view="{{currentTab}}" scroll-y="true" style="height: calc(100vh - 190px);">
             <view id="a" class="type">
                 <view class="wrap">
                     <block wx:for="{{culture.bookTypeCustoms}}" wx:key="{{index}}">
@@ -193,7 +193,7 @@ export default class classifyBook extends wepy.component {
 
     };
     data = {
-        into_view: 'a',
+        currentTab: 'a',
         culture: {},
         popular: {},
         literature: {},
@@ -202,6 +202,11 @@ export default class classifyBook extends wepy.component {
         technology: {}
     };
     methods = {
+        gotodetail(e) {
+            wepy.navigateTo({
+                url: 'bookList?classifyId=' + e.target.dataset.id
+            });
+        }
     };
     async onLoad() {
         console.log('classify-book');
@@ -255,6 +260,10 @@ export default class classifyBook extends wepy.component {
                 content: `获取classify失败，请关闭重新进入.`
             });
         }
+    }
+    changeCurrent(currentTab) {
+        this.currentTab = currentTab;
+        this.$apply();
     }
 }
 </script>

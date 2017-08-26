@@ -63,7 +63,6 @@ export default class Index extends wepy.page {
     }
     onLoad() {
         console.log('index页面加载');
-        console.log(this.$root);
     }
 
 }

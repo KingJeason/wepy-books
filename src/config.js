@@ -56,6 +56,19 @@ const api = {
             method: 'GET',
             url: '/findBooksByKey/'
         },
+        classifyById: {
+            method: 'GET',
+            url: '/getBooksByTypeid/'
+        },
+        bookCount: {
+            method: 'GET',
+            url: '/getBookCaseById/'
+        },
+        relevant: {
+            method: 'GET',
+            url: '/getRelativeBooks/'
+        }
+
 
     },
     blog: {

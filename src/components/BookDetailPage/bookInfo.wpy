@@ -1,0 +1,116 @@
+<style lang="scss">
+.bookinfo {
+    box-sizing: border-box;
+    display: flex;
+    padding: 20px;
+    background-color: #F0F8FF;
+    height: 30vh;
+    justify-content: center;
+    align-items: center;
+    .information {
+        width: 70%;
+        background-color: #F0F8FF;
+        .book_title {
+            font-weight: bold;
+            font-family: 'SimHei';
+        }
+        .book_text_style {
+            font-size: 12px;
+            color: #696969;
+        }
+    }
+    .rank {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 3px 0px 9px 1px #B3B3B3;
+        .rank_style_text {
+            color: #CCCCCC;
+            font-size: 12px;
+        }
+        .rank_style {
+            margin-bottom: 5px;
+        }
+        .rank_style_text {
+            color: #CCCCCC;
+            font-size: 12px;
+        }
+        .rank_style_rank {
+            color: #EEB422;
+        }
+        .rank_style_num {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+}
+</style>
+<template>
+    <view class="bookinfo">
+        <view class="information">
+            <text class="book_title">{{book.title}}\n</text>
+            <text class="book_text_style">{{book.author}}\n</text>
+            <text class="book_text_style">{{book.publisher}}\n</text>
+            <text class="book_text_style">{{book.pubdate}}\n</text>
+            <view class="book_num_info">
+                <text class="book_text_style">馆藏数量: {{count.bookCount}} </text>
+                <text class="book_text_style">可借数量: {{count.bookBorrowCount}}</text>
+            </view>
+        </view>
+        <view class="rank">
+            <view class="rank_style_text rank_style">豆瓣评分</view>
+            <view class="rank_style_num rank_style">{{book.rating.average}}</view>
+            <view class="rank_style_rank rank_style">{{rank}}</view>
+            <view class="rank_style_text rank_style">{{book.rating.numRaters}}人</view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+import { api } from '../../config';
+export default class bookInfo extends wepy.component {
+
+    components = {
+
+    };
+    data = {
+        book: [],
+        count: [],
+        rank: ''
+    };
+    methods = {
+    };
+    events = {
+        'bookData': async (book, id) => {
+            this.book = book;
+            this.bookId = id;
+            try {
+                let data = await wepy.request({
+                    url: api.common.bookCount.url + id,
+                    method: api.common.bookCount.method
+                });
+                this.count = data.data;
+                this.rank = this.getRating(book.rating.average / 2);
+
+                this.$apply();
+            } catch (e) {
+
+            }
+
+
+        }
+    }
+    async onLoad() {
+
+        console.log('BookDetail-info');
+    }
+    getRating(rating) {
+        if (rating > 5 || rating < 0) throw new Error('数字不在范围内');
+        return '★★★★★☆☆☆☆☆'.substring(5 - rating, 10 - rating);
+    }
+}
+</script>
