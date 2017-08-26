@@ -109,7 +109,7 @@
         <view class="bookview">
             <scroll-view scroll-x="true">
                 <block wx:for="{{recommendBooks}}" wx:key="index">
-                    <view class="item">
+                    <view class="item" wx:if={{item.isbn}}>
                         <image class="item-img" mode="" src="{{item.imageurl}}" @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}')"></image>
                         <view class="item-intro">
                             <view class="bookimgurl">{{item.name}}</view>
@@ -161,6 +161,7 @@ export default class recommend extends wepy.component {
                 }
             });
             this.recommendBooks = recommend.data.books;
+            this.$emit('indexLoadComplete', true);
             this.$apply();
         } catch (error) {
             wepy.showModal({

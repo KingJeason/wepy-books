@@ -46,7 +46,7 @@ export default class bookOperation extends wepy.component {
     };
     events = {
         'bookData': (data) => {
-
+            this.$emit('loadComplete', true);
         }
     }
     onLoad() {

@@ -3,10 +3,15 @@
 </style>
 <template>
     <view>
-        <bookImage />
-        <bookInfo />
-        <bookOperation />
-        <bookDetailInfo />
+        <view wx:if={{!wait}}>
+            <bookImage />
+            <bookInfo />
+            <bookOperation />
+            <bookDetailInfo />
+        </view>
+        <view wx:if={{wait}}>
+            <load />
+        </view>
     </view>
 </template>
 
@@ -16,7 +21,7 @@ import bookImage from '../components/BookDetailPage/bookImage';
 import bookInfo from '../components/BookDetailPage/bookInfo';
 import bookOperation from '../components/BookDetailPage/bookOperation';
 import bookDetailInfo from '../components/BookDetailPage/bookDetailInfo';
-
+import load from '../components/load'
 export default class BookDetail extends wepy.page {
     config = {
         'navigationBarTitleText': '书籍详情',
@@ -28,12 +33,26 @@ export default class BookDetail extends wepy.page {
         bookImage,
         bookInfo,
         bookOperation,
-        bookDetailInfo
+        bookDetailInfo,
+        load
     };
-
     data = {
+        wait: true,
+        loadData: [],
+        loadNum: 0
     };
+    events = {
+        'loadComplete': (p1,$event) => {
+            let comLength = Object.getOwnPropertyNames(this.$com).length
+            console.log(comLength,$event)
+            this.loadNum += 1;
+            if (this.loadNum === comLength - 1) {
+                this.wait = false;
 
+            }
+
+        }
+    };
     methods = {
     };
 

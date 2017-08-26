@@ -120,6 +120,7 @@ export default class rank extends wepy.component {
                 item.topimgUrl = '../../resources/images/top' + (index + 1) + '.png';
             });
             this.hootBooks = hootBooksData;
+            this.$emit('indexLoadComplete', true);
             this.$apply();
         } catch (error) {
             wepy.showModal({

@@ -1,14 +1,19 @@
 <style lang="scss">
-   view{
-       background-color: white;
-   }
+view {
+    background-color: white;
+}
 </style>
 <template>
     <view>
-        <search />
-        <topSwiper />
-        <rank />
-        <recommend />
+        <view wx:if="{{!wait}}">
+            <search />
+            <topSwiper />
+            <rank />
+            <recommend />
+        </view>
+        <view wx:if="{{wait}}">
+            <load />
+        </view>
     </view>
 </template>
 <script>
@@ -17,19 +22,33 @@ import swiper from '../../index/swiper';
 import rank from '../../index/rank';
 import recommend from '../../index/recommend';
 import search from '../../index/search';
+import load from '../../load';
 export default class Message extends wepy.component {
     components = {
         topSwiper: swiper,
         rank,
         recommend,
-        search
+        search,
+        load
     };
     data = {
+        loadNum: 0,
+        wait: true
     };
+    events = {
+        'indexLoadComplete': (p1) => {
+            let comLength = Object.getOwnPropertyNames(this.$com).length
+            this.loadNum += 1;
+            if (this.loadNum === comLength - 1) {
+                this.wait = false;
 
+            }
+
+        }
+    };
     methods = {
     };
-    onLoad () {
+    onLoad() {
         console.log('index');
     }
 }

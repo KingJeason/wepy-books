@@ -144,6 +144,7 @@ export default class bookDetailInfo extends wepy.component {
                     method: api.common.relevant.method
                 });
                 this.relevantBook = relevantBook.data;
+                this.$emit('loadComplete', true);
                 this.$apply();
             } catch (error) {
                 console.log('相关图书出错');

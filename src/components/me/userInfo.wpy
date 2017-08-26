@@ -1,18 +1,14 @@
-<style type="scss">
+<style lang="scss">
 </style>
-<template>
-    <view >
-        <userInfo />
-    </view>
+<<template>
+
 </template>
+
 <script>
 import wepy from 'wepy';
-// import interfaces from '../../../interfaces';
-import userInfo from '../../me/userInfo';
 export default class Me extends wepy.component {
 
     components = {
-        userInfo,
 
     }
 
@@ -22,7 +18,7 @@ export default class Me extends wepy.component {
     methods = {
     };
     async onLoad() {
-        console.log('me');
+        console.log('me-userInfo');
 
     }
 }

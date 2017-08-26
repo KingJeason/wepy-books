@@ -57,6 +57,7 @@ export default class search extends wepy.component {
     };
 
     onLoad() {
+        this.$emit('indexLoadComplete', true);
         console.log('index-search');
     }
 }

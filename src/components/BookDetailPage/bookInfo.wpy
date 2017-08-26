@@ -95,7 +95,7 @@ export default class bookInfo extends wepy.component {
                 });
                 this.count = data.data;
                 this.rank = this.getRating(book.rating.average / 2);
-
+                this.$emit('loadComplete', true);
                 this.$apply();
             } catch (e) {
 
