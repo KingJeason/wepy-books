@@ -126,8 +126,8 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import { api } from '../../config';
+import wepy from 'wepy'
+import { api } from '../../config'
 export default class search extends wepy.component {
 
     data = {
@@ -136,79 +136,79 @@ export default class search extends wepy.component {
         searchBooks: [],
         lastTime: '',
         flag: false
-    };
+    }
     methods = {
         inputChange(e) {
-            this.inputValue = this.trim(e.detail.value);
-            (e.detail.value !== '') ? this.clearShow = true : this.clearShow = false;
+            this.inputValue = this.trim(e.detail.value)
+            e.detail.value !== '' ? this.clearShow = true : this.clearShow = false
             if (this.trim(this.inputValue)) {
-                console.log(this.inputValue, '=inputValue');
-                this.throttle(this.findBooks, e.timestamp, 300, 500)();
-                this.lastTime = e.timestamp;
+                console.log(this.inputValue, '=inputValue')
+                this.throttle(this.findBooks, e.timestamp, 300, 500)()
+                this.lastTime = e.timestamp
             }
         },
         clearInput() {
-            this.inputValue = '';
-            this.clearShow = false;
-            console.log('clear');
+            this.inputValue = ''
+            this.clearShow = false
+            console.log('clear')
         },
         queryBook() {
             // console.log(this.$pages)
             wepy.navigateTo({
                 url: 'bookList?searchValue=' + this.inputValue
-            });
+            })
         },
         backToIndex() {
             wepy.navigateBack({
                 delta: 1
-            });
+            })
         }
 
-    };
+    }
     async findBooks() {
         try {
 
             let searchBooks = await wepy.request({
                 url: api.common.search.url + this.inputValue,
                 method: api.common.search.method
-            });
+            })
 
             if (searchBooks.data.books.length < 1000) {
-                this.searchBooks = searchBooks.data;
+                this.searchBooks = searchBooks.data
             }
-            this.$apply();
+            this.$apply()
         } catch (error) {
-            console.log('搜索图书出错');
+            console.log('搜索图书出错')
         }
     }
 
     async onLoad() {
-        console.log('queryPage-searchHearder');
+        console.log('queryPage-searchHearder')
     }
 
     throttle(method, time, delay, duration) {
-        var begin = time;
-        var that = this;
-        return (function() {
-            var args = arguments;
-            clearTimeout(method.tId);
-            console.log(time, '当前', that.lastTime, '开始', time - that.lastTime, '时间差');
+        var begin = time
+        var that = this
+        return function() {
+            var args = arguments
+            clearTimeout(method.tId)
+            console.log(time, '当前', that.lastTime, '开始', time - that.lastTime, '时间差')
             if (begin - that.lastTime >= duration) {
-                console.log('进入了1');
-                method.apply(that, args);
+                console.log('进入了1')
+                method.apply(that, args)
             } else {
                 method.tId = setTimeout(function() {
-                    console.log('进入了222 ');
-                    method.apply(that, args);
-                }, delay);
+                    console.log('进入了222 ')
+                    method.apply(that, args)
+                }, delay)
             }
-        });
+        }
     }
     trim(str) {
         if (str == null) {
-            str = '';
+            str = ''
         }
-        return str.replace(/(^\s*)|(\s*$)/g, '');
+        return str.replace(/(^\s*)|(\s*$)/g, '')
     }
 }
 </script>

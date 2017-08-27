@@ -8,29 +8,29 @@
 </template>
 
 <script>
-import wepy from 'wepy';
-import search from '../components/queryPage/search';
+import wepy from 'wepy'
+import search from '../components/queryPage/search'
 export default class Query extends wepy.page {
     config = {
         'navigationBarTitleText': '搜索',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#3b3a40'
-    };
+    }
 
     components = {
         search
-    };
+    }
 
     data = {
-    };
+    }
 
     methods = {
-    };
+    }
 
     onShow() {
     }
     onLoad() {
-        console.log('query页面加载');
+        console.log('query页面加载')
     }
 
 }

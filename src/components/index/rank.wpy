@@ -5,8 +5,8 @@
         border-bottom: 1px solid lightgray;
         margin-bottom: 20px;
         .header {
-            color: darkorange;
-            border-left: 4px solid orange;
+            color: #ff7700;
+            border-left: 4px solid #ff7700;
             font-family: 'SimHei';
             padding-left: 10px;
             font-size: 15px;
@@ -91,18 +91,18 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import { api } from '../../config';
+import wepy from 'wepy'
+import { api } from '../../config'
 export default class rank extends wepy.component {
 
     data = {
         hootBooks: []
-    };
+    }
     methods = {
-    };
+    }
 
     async onLoad() {
-        console.log('index-rank');
+        console.log('index-rank')
         try {
             // 获取热门图书
             let hootBooks = await wepy.request({
@@ -114,19 +114,19 @@ export default class rank extends wepy.component {
                 dataType: 'json',
                 data: {
                 }
-            });
-            let hootBooksData = hootBooks.data.hotBooks;
+            })
+            let hootBooksData = hootBooks.data.hotBooks
             hootBooksData.forEach((item, index) => {
-                item.topimgUrl = '../../resources/images/top' + (index + 1) + '.png';
-            });
-            this.hootBooks = hootBooksData;
-            this.$emit('indexLoadComplete', true);
-            this.$apply();
+                item.topimgUrl = '../../resources/images/top' + (index + 1) + '.png'
+            })
+            this.hootBooks = hootBooksData
+            this.$emit('indexLoadComplete', true)
+            this.$apply()
         } catch (error) {
             wepy.showModal({
                 title: '提示',
                 content: `获取热门图书失败，请关闭重新进入.`
-            });
+            })
         }
     }
     fuck() {

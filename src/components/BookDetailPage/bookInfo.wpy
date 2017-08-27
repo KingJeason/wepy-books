@@ -70,47 +70,46 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import { api } from '../../config';
+import wepy from 'wepy'
+import { api } from '../../config'
 export default class bookInfo extends wepy.component {
 
     components = {
 
-    };
+    }
     data = {
         book: [],
         count: [],
         rank: ''
-    };
+    }
     methods = {
-    };
+    }
     events = {
         'bookData': async (book, id) => {
-            this.book = book;
-            this.bookId = id;
+            this.book = book
+            this.bookId = id
             try {
                 let data = await wepy.request({
                     url: api.common.bookCount.url + id,
                     method: api.common.bookCount.method
-                });
-                this.count = data.data;
-                this.rank = this.getRating(book.rating.average / 2);
-                this.$emit('loadComplete', true);
-                this.$apply();
+                })
+                this.count = data.data
+                this.rank = this.getRating(book.rating.average / 2)
+                this.$emit('loadComplete', true)
+                this.$apply()
             } catch (e) {
 
             }
-
 
         }
     }
     async onLoad() {
 
-        console.log('BookDetail-info');
+        console.log('BookDetail-info')
     }
     getRating(rating) {
-        if (rating > 5 || rating < 0) throw new Error('数字不在范围内');
-        return '★★★★★☆☆☆☆☆'.substring(5 - rating, 10 - rating);
+        if (rating > 5 || rating < 0) throw new Error('数字不在范围内')
+        return '★★★★★☆☆☆☆☆'.substring(5 - rating, 10 - rating)
     }
 }
 </script>

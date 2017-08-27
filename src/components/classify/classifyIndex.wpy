@@ -1,0 +1,196 @@
+
+<template>
+    <view class="container category-container">
+        <view class="category-box">
+            <view class="left-box">
+                <block wx:for="{{categoryTypeArr}}" wx:key="{{_id}}">
+                    <view class="menu-item {{currentMenuIndex==index?'selected':''}}" @tap="changeCategory('{{index}}')">
+                        {{item}}
+                    </view>
+                </block>
+            </view>
+            <view class="right-box {{transClassArr[currentMenuIndex]}}">
+                <view class="foods-type-box">
+                    <repeat for="{{list}}" key="index" index="index" item="item">
+                        <classifyItem :type="item"></classifyItem>
+                    </repeat>
+                </view>
+            </view>
+
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+import classifyItem from './classifyItem'
+import { api } from '../../config'
+export default class classifyIndex extends wepy.component {
+
+    components = {
+        classifyItem
+    }
+    data = {
+        transClassArr: ['tanslate0', 'tanslate1', 'tanslate2', 'tanslate3', 'tanslate4', 'tanslate5', 'tanslate6', 'tanslate7'],
+        currentMenuIndex: 0,
+        categoryTypeArr: ['文化', '流行', '文学', '生活', '经管', '科技'],
+        list: {
+            culture: {
+                name: '文化',
+                data: {},
+            },
+            popular: {
+                name: '流行',
+                data: {},
+            },
+            literature: {
+                name: '文学',
+                data: {}
+            },
+            life: {
+                name: '生活',
+                data: {}
+            },
+            economy: {
+                name: '经管',
+                data: {}
+            },
+            technology: {
+                name: '科技',
+                data: {}
+            }
+        }
+    }
+    methods = {
+        changeCategory(index) {
+            this.currentMenuIndex = index;
+        }
+    }
+
+    async onLoad() {
+        console.log('classify-index')
+        try {
+            // 文化
+            let culture = await wepy.request({
+                url: api.common.classify.url + '2',
+                method: api.common.classify.method,
+            })
+            this.list['culture'].data = culture.data
+
+            // 流行
+            let popular = await wepy.request({
+                url: api.common.classify.url + '3',
+                method: api.common.classify.method,
+            })
+            this.list['popular'].data = popular.data
+
+            // 文学
+            let literature = await wepy.request({
+                url: api.common.classify.url + '4',
+                method: api.common.classify.method,
+            })
+            this.list['literature'].data = literature.data
+
+            // 生活
+            let life = await wepy.request({
+                url: api.common.classify.url + '5',
+                method: api.common.classify.method,
+            })
+            this.list['life'].data = life.data
+
+            // 经管
+            let economy = await wepy.request({
+                url: api.common.classify.url + '6',
+                method: api.common.classify.method,
+            })
+            this.list['economy'].data = economy.data
+
+            // 科技
+            let technology = await wepy.request({
+                url: api.common.classify.url + '7',
+                method: api.common.classify.method,
+            })
+            this.list['technology'].data = technology.data
+
+            this.$apply()
+        } catch (error) {
+            wepy.showModal({
+                title: '提示',
+                content: `获取classify失败，请关闭重新进入.`
+            })
+        }
+    }
+}
+</script>
+<style lang="scss">
+.category-container {
+    /*min-height: 100vh;*/
+    background: white;
+}
+
+.category-box {
+    display: flex;
+    height: 90vh;
+    overflow: hidden;
+}
+
+.left-box {
+    flex: 0 0 150rpx;
+    border-right: 1rpx solid #D8D8D8;
+}
+
+.menu-item {
+    height: 50rpx;
+    padding: 20rpx 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    border-left: 6rpx solid #fff;
+}
+
+.menu-item.selected {
+    color: #ff7700;
+    border-left-color: #ff7700;
+}
+
+.right-box {
+    flex: 1;
+    transition: all 500ms ease-in-out;
+}
+
+.tanslate0 {
+    transform: translate(0, 0);
+}
+
+.tanslate1 {
+    transform: translate(0, -90vh);
+}
+
+.tanslate2 {
+    transform: translate(0, -180vh);
+}
+
+.tanslate3 {
+    transform: translate(0, -270vh);
+}
+
+.tanslate4 {
+    transform: translate(0, -360vh);
+}
+
+// .tanslate5 {
+//     transform: translate(0, -450vh);
+// }
+// .tanslate6 {
+//     transform: translate(0, -540vh);
+// }
+// .tanslate7 {
+//     transform: translate(0, -700vh);
+// }
+// .tanslate8 {
+//     transform: translate(0, -800vh);
+// }
+.foods-type-box {
+    height: 90vh;
+}
+</style>

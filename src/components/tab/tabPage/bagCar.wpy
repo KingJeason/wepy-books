@@ -5,19 +5,19 @@
 
 </template>
 <script>
-    import wepy from 'wepy';
+    import wepy from 'wepy'
     export default class Message extends wepy.component {
 
         components = {
 
-        };
+        }
         data = {
-        };
+        }
         methods = {
-        };
+        }
 
         onLoad () {
-            console.log('bagCar');
+            console.log('bagCar')
         }
     }
 </script>

@@ -1,45 +1,36 @@
 <style lang="scss">
+
 </style>
 <template>
     <view>
-        <userHeader />
-        <tab />
-        <classifyBook />
-        <fuck />
+        <classifyIndex />
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import header from '../../classify/header';
-import tab from '../../classify/tab';
-import classifyBook from '../../classify/classifyBook';
-import fuck from '../../classify/fuck';
+import wepy from 'wepy'
+// import header from '../../classify/header'
+// import tab from '../../classify/tab'
+// import classifyBook from '../../classify/classifyBook'
+import classifyIndex from '../../classify/classifyIndex'
 export default class Message extends wepy.component {
 
     components = {
-        userHeader: header,
-        tab,
-        classifyBook,
-        fuck
-    };
+        // userHeader: header,
+        // tab,
+        // classifyBook,
+        classifyIndex
+    }
 
     data = {
 
-    };
+    }
     methods = {
 
-    };
+    }
 
     async onLoad() {
-        console.log('classify');
-        try {
+        console.log('classify')
 
-        } catch (error) {
-            wepy.showModal({
-                title: '提示',
-                content: `获取分类图书失败，请关闭重新进入.`
-            });
-        }
     }
 }
 </script>

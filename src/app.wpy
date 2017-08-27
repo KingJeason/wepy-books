@@ -8,9 +8,9 @@ body {
 
 <script>
 
-import wepy from 'wepy';
-import 'wepy-async-function';
-import interfaces from './interfaces';
+import wepy from 'wepy'
+import 'wepy-async-function'
+// import interfaces from './interfaces'
 export default class extends wepy.app {
 
     config = {
@@ -26,24 +26,16 @@ export default class extends wepy.app {
             'navigationBarTitleText': 'WeChat',
             'navigationBarTextStyle': 'black'
         }
-    };
+    }
 
     constructor() {
-        super();
-        this.use('promisify');
-        this.use('requestfix');
+        super()
+        this.use('promisify')
+        this.use('requestfix')
     }
 
     async onLaunch() {
-        console.log('appLaunch');
-        try {
-            await interfaces.login();
-        } catch (error) {
-            wepy.showModal({
-                title: '提示',
-                content: `用户登录失败，请截图本提示，并联系1503268691@qq.com`
-            });
-        }
+        console.log('appLaunch')
     }
 }
 </script>

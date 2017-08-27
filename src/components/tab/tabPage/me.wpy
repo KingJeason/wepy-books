@@ -1,29 +1,36 @@
 <style type="scss">
+
 </style>
 <template>
-    <view >
+    <view>
         <userInfo />
+        <operation />
+        <myRoom />
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-// import interfaces from '../../../interfaces';
-import userInfo from '../../me/userInfo';
+import wepy from 'wepy'
+// import interfaces from '../../../interfaces'
+import userInfo from '../../me/userInfo'
+import operation from '../../me/operation'
+import myRoom from '../../me/myRoom'
 export default class Me extends wepy.component {
 
     components = {
         userInfo,
+        operation,
+        myRoom
 
     }
 
     data = {
-    };
+    }
 
     methods = {
-    };
+    }
     async onLoad() {
-        console.log('me');
 
+        console.log('me')
     }
 }
 </script>

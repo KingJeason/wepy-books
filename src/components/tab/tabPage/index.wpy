@@ -1,10 +1,10 @@
 <style lang="scss">
-view {
+.indexPage {
     background-color: white;
 }
 </style>
 <template>
-    <view>
+    <view class="indexPage">
         <view wx:if="{{!wait}}">
             <search />
             <topSwiper />
@@ -17,12 +17,12 @@ view {
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import swiper from '../../index/swiper';
-import rank from '../../index/rank';
-import recommend from '../../index/recommend';
-import search from '../../index/search';
-import load from '../../load';
+import wepy from 'wepy'
+import swiper from '../../index/swiper'
+import rank from '../../index/rank'
+import recommend from '../../index/recommend'
+import search from '../../index/search'
+import load from '../../load'
 export default class Message extends wepy.component {
     components = {
         topSwiper: swiper,
@@ -30,26 +30,26 @@ export default class Message extends wepy.component {
         recommend,
         search,
         load
-    };
+    }
     data = {
         loadNum: 0,
         wait: true
-    };
+    }
     events = {
         'indexLoadComplete': (p1) => {
             let comLength = Object.getOwnPropertyNames(this.$com).length
-            this.loadNum += 1;
+            this.loadNum += 1
             if (this.loadNum === comLength - 1) {
-                this.wait = false;
+                this.wait = false
 
             }
 
         }
-    };
+    }
     methods = {
-    };
+    }
     onLoad() {
-        console.log('index');
+        console.log('index')
     }
 }
 </script>

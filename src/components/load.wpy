@@ -1,19 +1,22 @@
 <style lang="scss">
-.load-warp{
+.load-warp {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    .text{
+    .text {
         font-family: 'SimHei'
     }
 }
-.index{
+
+.index {
     height: calc(100vh)
 }
-.noindex{
-    height: calc(100vh - 51px)
+
+.noindex {
+    height: calc(100vh - 9vh)
 }
+
 .spinner {
     margin-bottom: 20px;
     width: 20px;
@@ -162,7 +165,7 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
+import wepy from 'wepy'
 export default class load extends wepy.component {
 
     components = {
@@ -171,16 +174,16 @@ export default class load extends wepy.component {
 
     data = {
         index: ''
-    };
+    }
 
     methods = {
-    };
+    }
     async onLoad() {
-        console.log('load');
-        if(this.$root.$name === 'index'){
-            this.index = 1;
-        }else{
-            this.index = 0;
+        console.log('load')
+        if (this.$root.$name === 'index') {
+            this.index = 1
+        } else {
+            this.index = 0
         }
 
     }

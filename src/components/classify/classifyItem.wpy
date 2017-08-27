@@ -1,0 +1,109 @@
+<style lang="scss">
+.category-detail-box {
+    overflow: hidden;
+    padding: 20px;
+    height: 90vh;
+    box-sizing: border-box;
+}
+
+.category-header {
+    height: 200rpx;
+    text-align: center;
+}
+
+.category-header image {
+    border-radius: 5rpx;
+    width: 520rpx;
+    max-height: 100%;
+}
+
+.category-title {
+    margin: 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-title text {
+    font-size: 24rpx;
+    color: #ff7700;
+}
+
+.category-title text::before,
+.category-title text::after {
+    content: '';
+    display: inline-block;
+    position: relative;
+    top: -6rpx;
+    width: 70rpx;
+    height: 2rpx;
+    margin: 0 20rpx;
+    background-color: greenyellow;
+}
+
+.category-main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-goods-items {
+    width: 30%;
+    margin-bottom: 20rpx;
+    text-align: center;
+}
+
+.category-goods-items.middle {
+    margin: 0 20rpx;
+}
+
+.category-goods-items image {
+    height: 50rpx;
+    width: 50rpx;
+    border-radius: 50rpx;
+}
+
+.category-goods-items view {
+    color: #444452;
+    font-size: 24rpx;
+}
+</style>
+<template>
+    <view class="category-detail-box" hidden="{{!type}}">
+        <view class="category-title">
+            <text>{{type.name}}</text>
+        </view>
+        <view class="category-main">
+            <block wx:for="{{type.data.bookTypeCustoms}}" wx:key="{{index}}" >
+                <view  wx:if="{{index < 24}}" class="category-goods-items {{index%3==1?'middle':''}}" data-index="{{index}}" data-name="{{item.title}}" bindtap="onThemeItemTap">
+                    <image src="../resources/icons/{{item.parentId}}/{{item.id}}.png" mode="aspectFill"></image>
+                    <view>{{item.typeName}}</view>
+                </view>
+            </block>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+// import interfaces from '../../interfaces/index'
+
+export default class classifyItem extends wepy.component {
+    props = {
+        type: Object
+    }
+    components = {
+
+    }
+    data = {
+        url: ['../resources/icons/wenhua/', '../resources/icons/liuxing/', '../resources/icons/wenxue/', '../resources/icons/shenghuo/', '../resources/icons/jingguan/', '../resources/icons/keji/']
+    }
+    methods = {
+        onThemeItemTap(e){
+            console.log(e)
+        }
+    }
+
+    async onLoad() {
+
+    }
+}
+</script>

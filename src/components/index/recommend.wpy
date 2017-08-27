@@ -1,7 +1,7 @@
 <style lang="scss">
 .serie {
     background-color: #e6e6e6;
-    margin-bottom: 51px;
+    margin-bottom: 10vh;
     .serie-header {
         display: flex;
         justify-content: space-between;
@@ -17,7 +17,7 @@
         }
         >text:first-child {
             margin-top: 10px;
-            border-left: 4px solid deepskyblue;
+            border-left: 4px solid #ff7700;
             font-family: 'SimHei';
             padding-left: 10px;
             font-size: 15px;
@@ -86,13 +86,13 @@
             .booklistend {
                 width: 100%;
                 border-radius: 5px;
-                border: 1px solid lawngreen;
+                border: 1px solid #ff7700;
                 text-align: center;
                 font-family: 'SimHei';
                 font-size: 15px;
                 font-weight: bold;
                 padding: 5px;
-                color: lawngreen;
+                color: #ff7700;
                 box-sizing: border-box;
             }
         }
@@ -130,24 +130,24 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
-import { api } from '../../config';
-export default class recommend extends wepy.component {
+import wepy from 'wepy'
+import { api } from '../../config'
 
+export default class recommend extends wepy.component {
     data = {
         recommendBooks: []
-    };
+    }
     methods = {
         gotodetail(isbn, typeId, id) {
             console.log(isbn, typeId, id)
             wepy.navigateTo({
                 url: 'bookDetail?isbn=' + isbn + '&typeId=' + typeId + '&id=' + id
-            });
+            })
         }
-    };
+    }
 
     async onLoad() {
-        console.log('index-recommend');
+        console.log('index-recommend')
         try {
             // 获取每日推荐
             let recommend = await wepy.request({
@@ -159,15 +159,15 @@ export default class recommend extends wepy.component {
                 dataType: 'json',
                 data: {
                 }
-            });
-            this.recommendBooks = recommend.data.books;
-            this.$emit('indexLoadComplete', true);
-            this.$apply();
+            })
+            this.recommendBooks = recommend.data.books
+            this.$emit('indexLoadComplete', true)
+            this.$apply()
         } catch (error) {
             wepy.showModal({
                 title: '提示',
                 content: `获取每日推荐失败，请关闭重新进入.`
-            });
+            })
         }
     }
 }

@@ -1,13 +1,13 @@
 <style lang="scss">
 .classify-tab {
-    height: 39px;
+    height: 40px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-around;
     border-bottom: 1px solid lightgray;
-    background-color: #141414!important;
+    background-color: white!important;
     .tab-item {
-        background-color: #141414!important;
+        background-color: white!important;
 
         flex-grow: 1;
         text-align: center;
@@ -15,11 +15,11 @@
         font-family: 'SimHei';
         padding: 10px;
         line-height: 16px;
-        color: lightgray;
+        color: black;
     }
     .tab-hover {
-        color: #fff;
-        border-bottom: 2px solid #fff;
+        color: black;
+        border-bottom: 2px solid #ff7700;
         transition: color .5s ease .1s;
     }
 }
@@ -35,35 +35,35 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
+import wepy from 'wepy'
 export default class tab extends wepy.component {
 
     components = {
 
-    };
+    }
     data = {
         class: ['tab-hover', '', '', '', '', '', '']
 
-    };
+    }
     methods = {
         changeCurrent(currentTab) {
-            let num = currentTab.charCodeAt() - 97;
-            let arr = this.class;
+            let num = currentTab.charCodeAt() - 97
+            let arr = this.class
             for (var i = 0; i < arr.length; i++) {
                 if (i === num) {
-                    arr[i] = 'tab-hover';
+                    arr[i] = 'tab-hover'
                 } else {
-                    arr[i] = '';
+                    arr[i] = ''
                 }
             }
-            this.class = arr;
-            this.$invoke('../classifyBook', 'changeCurrent', currentTab);
+            this.class = arr
+            this.$invoke('../classifyBook', 'changeCurrent', currentTab)
 
         }
-    };
+    }
 
     onLoad() {
-        console.log('classify-tab');
+        console.log('classify-tab')
     }
 }
 </script>

@@ -33,24 +33,24 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
+import wepy from 'wepy'
 export default class bookOperation extends wepy.component {
 
     components = {
 
-    };
+    }
     data = {
 
-    };
+    }
     methods = {
-    };
+    }
     events = {
         'bookData': (data) => {
-            this.$emit('loadComplete', true);
+            this.$emit('loadComplete', true)
         }
     }
     onLoad() {
-        console.log('BookDetail-Operation');
+        console.log('BookDetail-Operation')
     }
 }
 </script>

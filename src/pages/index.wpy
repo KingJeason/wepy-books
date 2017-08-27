@@ -1,6 +1,6 @@
 <style type="scss">
 .tab_item {
-    height: 100%
+    height: 100%;
 }
 
 page,
@@ -30,18 +30,18 @@ page,
 </template>
 
 <script>
-import wepy from 'wepy';
-import index from '../components/tab/tabPage/index';
-import classify from '../components/tab/tabPage/classify';
-import bagcar from '../components/tab/tabPage/bagCar';
-import me from '../components/tab/tabPage/me';
-import tab from '../components/tab/tabBar';
+import wepy from 'wepy'
+import index from '../components/tab/tabPage/index'
+import classify from '../components/tab/tabPage/classify'
+import bagcar from '../components/tab/tabPage/bagCar'
+import me from '../components/tab/tabPage/me'
+import tab from '../components/tab/tabBar'
 export default class Index extends wepy.page {
     config = {
         'navigationBarTitleText': '求知微图书',
         'navigationBarTextStyle': 'white',
-        'navigationBarBackgroundColor': '#3b3a40'
-    };
+        'navigationBarBackgroundColor': '#ff7700'
+    }
 
     components = {
         index,
@@ -49,20 +49,20 @@ export default class Index extends wepy.page {
         bagcar,
         me,
         tab
-    };
+    }
 
     data = {
         currentTab: 0
-    };
+    }
 
     methods = {
-    };
+    }
 
     onShow() {
-        this.currentTab = 0;
+        this.currentTab = 0
     }
     onLoad() {
-        console.log('index页面加载');
+        console.log('index页面加载')
     }
 
 }

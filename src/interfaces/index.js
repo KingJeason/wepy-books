@@ -22,11 +22,11 @@ const interfaces = {
                 }
             })
             await store.setStorage({
-                'userid': userinfo.data.user.id,
+                'userId': userinfo.data.user.id,
                 'userInfo': userinfoRaw.userInfo
 
             })
-
+            console.log('数据已存储')
         } catch (e) {
             wepy.showModal({
                 title: '提示',

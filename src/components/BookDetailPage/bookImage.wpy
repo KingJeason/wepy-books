@@ -18,25 +18,25 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
+import wepy from 'wepy'
 export default class bookImage extends wepy.component {
 
     components = {
 
-    };
+    }
     data = {
         book: []
-    };
+    }
     methods = {
-    };
+    }
     events = {
         'bookData': (data) => {
-            this.book = data;
-            this.$emit('loadComplete', true);
+            this.book = data
+            this.$emit('loadComplete', true)
         }
     }
     onLoad() {
-        console.log('BookDetail-image');
+        console.log('BookDetail-image')
     }
 }
 </script>

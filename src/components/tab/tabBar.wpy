@@ -1,28 +1,34 @@
 <style lang="scss">
     $fontcolor: #7b7b7b;
-    $activecolor: #13b113;
+    $activecolor: #ff7700;
     .tab {
         box-sizing: border-box;
         color: $fontcolor;
         position: fixed;
         bottom: 0;
-        height: 51px;
+        height: 10vh;
         width: 100%;
         border-top: 1px solid #dad9d6;
         background-color: #f7f7f7;
         font-size: 24rpx;
         white-space: nowrap;
+        display: flex;
+
         .tab_item {
             &.active {
                 color: $activecolor;
             }
-            display: inline-block;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           flex-direction: column;
             width: 25%;
-            text-align: center;
+            flex: 1;
+
         }
         .icon {
-            width: 60rpx;
-            height: 60rpx;
+            width: 50rpx;
+            height: 50rpx;
             display: block;
             margin: auto;
         }
@@ -53,7 +59,7 @@
     </view>
 </template>
 <script>
-    import wepy from 'wepy';
+    import wepy from 'wepy'
 
     export default class Tab extends wepy.component {
 
@@ -61,18 +67,18 @@
             active: {
                 twoWay: true
             }
-        };
+        }
         data = {
-        };
+        }
 
         methods = {
             change (idx, evt) {
-                this.active = +idx;
+                this.active = +idx
             }
-        };
+        }
 
         onLoad () {
-            console.log('tabBar');
+            console.log('tabBar')
         }
     }
 </script>

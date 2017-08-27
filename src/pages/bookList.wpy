@@ -56,42 +56,41 @@
 </template>
 
 <script>
-import wepy from 'wepy';
-import { api } from '../config';
+import wepy from 'wepy'
+import { api } from '../config'
 export default class BookList extends wepy.page {
     config = {
         'navigationBarTitleText': '详情',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#3b3a40'
-    };
+    }
 
     components = {
-    };
-
+    }
     data = {
         books: []
-    };
+    }
 
     methods = {
-    };
+    }
 
     onShow() {
     }
     async onLoad(params, data) {
-        let books = [];
+        let books = []
         try {
             if (params.searchValue) {
-                console.log('search逻辑');
+                console.log('search逻辑')
                 books = await wepy.request({
                     url: api.common.search.url + params.searchValue,
                     method: api.common.search.methodk,
                     header: {
                         'Content-Type': 'json'
                     },
-                });
+                })
                 wepy.setNavigationBarTitle({
                     title: '搜索: ' + params.searchValue
-                });
+                })
             } else if (params.classifyId) {
                 books = await wepy.request({
                     url: api.common.classifyById.url + params.classifyId,
@@ -99,12 +98,12 @@ export default class BookList extends wepy.page {
                     header: {
                         'Content-Type': 'json'
                     },
-                });
+                })
             }
-            this.books = books.data.books;
-            this.$apply();
+            this.books = books.data.books
+            this.$apply()
         } catch (error) {
-            console.log('bookList出错');
+            console.log('bookList出错')
         }
 
     }

@@ -1,0 +1,81 @@
+<style lang="scss">
+.operation {
+
+    box-sizing: border-box;
+    border-top: 2rpx solid lightgray;
+    border-bottom: 2rpx solid lightgray;
+    padding: 20rpx 0;
+    height: 12vh;
+    display: flex;
+    background: white;
+    .item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        border-right: 2rpx solid lightgray;
+        position: relative;
+        .icon {
+            width: 50rpx;
+            height: 50rpx;
+        }
+        .text {
+            font-family: 'SimHei';
+            font-size: 28rpx;
+        }
+        .mynum{
+            position: absolute;
+            width: 40rpx;
+            height: 30rpx;
+            border-radius: 30rpx;
+            background-color: red;
+            right: 60rpx;
+            top: 0;
+            color: white;
+            font-size:30rpx;
+            line-height: 30rpx;
+            text-align: center;
+        }
+    }
+    view:last-child{
+        border:none;
+    }
+}
+</style>
+<template>
+    <view class="operation">
+        <view class="item">
+            <image class="icon" src="../resources/icons/robot.png"></image>
+            <text class="text">客服</text>
+        </view>
+        <view class="item">
+            <image class="icon" src="../resources/icons/zl.png"></image>
+            <text class="text">完善资料</text>
+        </view>
+        <view class="item">
+            <image class="icon" src="../resources/icons/msg.png"></image>
+            <text class="text">动态</text>
+            <view class="mynum">
+                3
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class operation extends wepy.component {
+
+    data = {
+
+    }
+    methods = {
+
+    }
+
+    onLoad() {
+
+        console.log('me-operation')
+    }
+}
+</script>

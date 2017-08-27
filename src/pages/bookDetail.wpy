@@ -16,18 +16,18 @@
 </template>
 
 <script>
-import wepy from 'wepy';
-import bookImage from '../components/BookDetailPage/bookImage';
-import bookInfo from '../components/BookDetailPage/bookInfo';
-import bookOperation from '../components/BookDetailPage/bookOperation';
-import bookDetailInfo from '../components/BookDetailPage/bookDetailInfo';
+import wepy from 'wepy'
+import bookImage from '../components/BookDetailPage/bookImage'
+import bookInfo from '../components/BookDetailPage/bookInfo'
+import bookOperation from '../components/BookDetailPage/bookOperation'
+import bookDetailInfo from '../components/BookDetailPage/bookDetailInfo'
 import load from '../components/load'
 export default class BookDetail extends wepy.page {
     config = {
         'navigationBarTitleText': '书籍详情',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#3b3a40'
-    };
+    }
 
     components = {
         bookImage,
@@ -35,26 +35,26 @@ export default class BookDetail extends wepy.page {
         bookOperation,
         bookDetailInfo,
         load
-    };
+    }
     data = {
         wait: true,
         loadData: [],
         loadNum: 0
-    };
+    }
     events = {
-        'loadComplete': (p1,$event) => {
+        'loadComplete': (p1, $event) => {
             let comLength = Object.getOwnPropertyNames(this.$com).length
-            console.log(comLength,$event)
-            this.loadNum += 1;
+            // console.log(comLength,$event)
+            this.loadNum += 1
             if (this.loadNum === comLength - 1) {
-                this.wait = false;
+                this.wait = false
 
             }
 
         }
-    };
+    }
     methods = {
-    };
+    }
 
     onShow() {
     }
@@ -65,12 +65,12 @@ export default class BookDetail extends wepy.page {
                 header: {
                     'Content-Type': 'json'
                 },
-            });
-            this.$broadcast('bookData', book.data, params.id, params.typeId);
+            })
+            this.$broadcast('bookData', book.data, params.id, params.typeId)
         } catch (error) {
-            console.log('豆瓣出错');
+            console.log('豆瓣出错')
         }
-        console.log('BookDetail页面加载');
+        console.log('BookDetail页面加载')
     }
 
 }

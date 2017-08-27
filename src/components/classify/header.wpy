@@ -3,16 +3,17 @@
     height: 100px;
     box-sizing: border-box;
     padding: 15px;
-    background-color: #141414;
+    background-color: #ff7700;
     position: relative;
     .user {
-        background-color: #141414;
+        background-color: #ff7700;
         display: flex;
         justify-content: flex-start;
         image {
             width: 70px;
             height: 70px;
             border-radius: 50%;
+            border: 4px solid white;
             margin-right: 10px;
         }
         text {
@@ -33,33 +34,38 @@
     </view>
 </template>
 <script>
-import wepy from 'wepy';
+import wepy from 'wepy'
+import interfaces from '../../interfaces/index'
 export default class header extends wepy.component {
 
     components = {
 
-    };
+    }
     data = {
         userInfo: {
 
         }
-    };
+    }
     methods = {
-    };
+    }
 
     async onLoad() {
-        console.log('classify-header');
+        console.log('classify-header')
         try {
+            if (wepy.getStorageSync('userId') === '') {
+                await interfaces.login()
+            }
+            console.log('妇产科')
             let userInfo = await wepy.getStorage({
                 key: 'userInfo',
-            });
-            this.userInfo = userInfo.data;
-            this.$apply();
+            })
+            this.userInfo = userInfo.data
+            this.$apply()
         } catch (error) {
             wepy.showModal({
                 title: '提示',
                 content: `授权失败，请重新打开并确定授权已获得更好的体验(*^__^*) .`
-            });
+            })
         }
     }
 }

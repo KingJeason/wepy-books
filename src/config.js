@@ -71,38 +71,16 @@ const api = {
 
 
     },
-    blog: {
-        list: {
+    lendBook: {
+        getLendBooks: {
             method: 'GET',
-            url: '/v2/blogs'
-        },
-        detail: {
+            url: '/getLendBooks/'
+        }
+    },
+    collectBook: {
+        getCollectBook: {
             method: 'GET',
-            url: '/v2/blogs'
-        },
-        like: {
-            method: 'POST',
-            url: '/blog/like'
-        },
-        delete: {
-            method: 'POST',
-            url: '/blog/delete'
-        },
-        imageUpload: {
-            method: 'POST',
-            url: '/blog/image'
-        },
-        new: {
-            method: 'POST',
-            url: '/v2/blogs'
-        },
-        comment: {
-            method: 'POST',
-            url: '/v2/comments'
-        },
-        deleteComment: {
-            method: 'DELETE',
-            url: '/v2/comments'
+            url: '/getCollectBooks/'
         }
     },
     notifications: {
@@ -118,10 +96,6 @@ const api = {
             method: 'PUT',
             url: '/v2/notifications'
         }
-    },
-    ads: {
-        method: 'GET',
-        url: '/v2/ads'
     },
     configs: {
         method: 'GET',
