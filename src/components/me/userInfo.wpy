@@ -26,6 +26,12 @@
             margin-right: 40rpx;
             border: 8rpx solid white;
         }
+        button {
+            background: transparent;
+            border: 2rpx solid white;
+            color: white;
+            font-family: 'SimHei';
+        }
         .nameCity {
             display: flex;
             flex-direction: column;
@@ -49,10 +55,16 @@
     <view class="userInfo">
         <image class="icon" src="../resources/icons/set.png"></image>
         <view class="info">
-            <image src="{{userInfo.data.avatarUrl}}"></image>
-            <view class="nameCity">
-                <text>{{userInfo.data.nickName}}</text>
-                <text>{{userInfo.data.city}}</text>
+            <view class="info" wx:if="{{isLogin}}">
+                <image src="{{userInfo.avatarUrl}}"></image>
+                <view class="nameCity">
+                    <text>{{userInfo.nickName}}</text>
+                    <text>{{userInfo.city}}</text>
+                </view>
+            </view>
+            <view class="info" wx:if="{{!isLogin}}">
+                <image src="../resources/images/loginfailed.jpg"></image>
+                <button open-type="getUserInfo" bindgetuserinfo="userInfoHandler">授权登录</button>
             </view>
         </view>
     </view>
@@ -60,6 +72,7 @@
 
 <script>
 import wepy from 'wepy'
+import interfaces from '../../interfaces/index'
 export default class Me extends wepy.component {
 
     components = {
@@ -67,22 +80,27 @@ export default class Me extends wepy.component {
     }
 
     data = {
-        userInfo: {}
+        userInfo: {},
+        isLogin: false
     }
 
     methods = {
+        userInfoHandler(e) {
+            if (e.errMsg !== "getUserInfo:fail auth deny"){
+                this.userInfo = JSON.parse(e.detail.rawData)
+                this.isLogin = true
+                this.$apply()
+            }
+        }
     }
     async onLoad() {
         try {
-            this.userInfo = await wepy.getStorage({
-                key: 'userInfo'
-            })
+
         } catch (error) {
 
         }
 
-        this.$apply()
-
     }
+
 }
 </script>

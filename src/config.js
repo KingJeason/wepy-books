@@ -30,13 +30,13 @@ const api = {
             method: 'GET',
             url: '/weChatLogin/'
         },
-        info: {
+        userInfo: {
             method: 'GET',
-            url: '/user/info'
+            url: '/getUserInfoById/'
         },
-        blog: {
-            method: 'GET',
-            url: '/v2/user'
+        editInfo: {
+            url: '/finishUserInfo/',
+            method: 'PUT'
         }
     },
     common: {
@@ -81,6 +81,12 @@ const api = {
         getCollectBook: {
             method: 'GET',
             url: '/getCollectBooks/'
+        }
+    },
+    appointBook: {
+        getAppointBook:{
+            method: 'GET',
+            url: '/getAppointBooks/'
         }
     },
     notifications: {

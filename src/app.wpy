@@ -18,7 +18,8 @@ export default class extends wepy.app {
             'pages/index',
             'pages/query',
             'pages/bookList',
-            'pages/bookDetail'
+            'pages/bookDetail',
+            'pages/editInfo',
         ],
         'window': {
             'backgroundTextStyle': 'light',
@@ -35,7 +36,9 @@ export default class extends wepy.app {
     }
 
     async onLaunch() {
-        console.log('appLaunch')
+
+        await console.log('appLaunch')
     }
+
 }
 </script>

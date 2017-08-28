@@ -5,19 +5,29 @@
 
 </template>
 <script>
-    import wepy from 'wepy'
-    export default class Message extends wepy.component {
+import wepy from 'wepy'
+// import interfaces from '../../../interfaces/index'
+import login from '../../mixins/login'
+export default class Message extends wepy.component {
 
-        components = {
+    components = {
 
-        }
-        data = {
-        }
-        methods = {
-        }
-
-        onLoad () {
-            console.log('bagCar')
-        }
     }
+    data = {
+    }
+    methods = {
+    }
+    mixins = [login]
+
+    async onLoad() {
+        try {
+            await this.getStoreById()
+            console.log(this.userId,'from bagCar')
+            this.$apply()
+        } catch (error) {
+
+        }
+        console.log('bagCar')
+    }
+}
 </script>

@@ -51,22 +51,6 @@ export default class header extends wepy.component {
 
     async onLoad() {
         console.log('classify-header')
-        try {
-            if (wepy.getStorageSync('userId') === '') {
-                await interfaces.login()
-            }
-            console.log('妇产科')
-            let userInfo = await wepy.getStorage({
-                key: 'userInfo',
-            })
-            this.userInfo = userInfo.data
-            this.$apply()
-        } catch (error) {
-            wepy.showModal({
-                title: '提示',
-                content: `授权失败，请重新打开并确定授权已获得更好的体验(*^__^*) .`
-            })
-        }
     }
 }
 </script>

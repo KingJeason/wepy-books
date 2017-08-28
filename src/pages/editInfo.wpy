@@ -1,0 +1,169 @@
+<style lang="scss">
+.editInfo {
+
+    .header {
+        background-color: #ff7700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 180px;
+        position: relative;
+    }
+    .header image {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+    }
+    .bottom {
+        background-color: #F8F8FF;
+        margin-bottom: 50px;
+    }
+    .know {
+        padding: 10px;
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
+    .know-item {
+        border-bottom: 1px solid lightgray;
+        padding: 10px;
+        display: flex;
+    }
+    .know-item text {
+        font-family: 'SimHei';
+    }
+    .item-left {
+        margin-right: 10px;
+        flex: 1;
+    }
+    .item-right {
+        flex: 3;
+    }
+    button {
+        width: 40%;
+        border-radius: 12px;
+        font-family: 'SimHei';
+        background-color: yellow;
+        box-shadow: 5px 5px 15px 5px #E0FFFF;
+    }
+}
+</style>
+<template>
+    <view class=".editInfo">
+        <form @submit="submitUserDetaiInfo">
+            <view class="header">
+                <image src="{{userInfo.avatarUrl}}"></image>
+            </view>
+            <view class="bottom">
+                <view class="know">
+                    <view class="know-item">
+                        <text class="item-left">用户名</text>
+                        <input name="username" type="text" class="item-right" value="{{userDetaiInfo.username}}"></input>
+                    </view>
+                    <view class="know-item">
+                        <text class="item-left">地区</text>
+                        <input name="area" type="text" class="item-right" value="{{userDetaiInfo.area}}"></input>
+                    </view>
+                </view>
+                <view class="know">
+                    <view class="know-item">
+                        <text class="item-left">手机号</text>
+                        <input name="phone" type="text" class="item-right" value="{{userDetaiInfo.phone}}"></input>
+                    </view>
+                    <view class="know-item">
+                        <text class="item-left">Email</text>
+                        <input name="Email" type="text" class="item-right" value="{{userDetaiInfo.email}}"></input>
+                    </view>
+                    <view class="know-item">
+                        <text class="item-left">身份证号</text>
+                        <input name="idcard" type="text" class="item-right" value="{{userDetaiInfo.idcard}}"></input>
+                    </view>
+                </view>
+            </view>
+            <button form-type="submit">保存</button>
+        </form>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { api } from '../config'
+export default class EditInfo extends wepy.page {
+    config = {
+        'navigationBarTitleText': '个人信息',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        userInfo: {},
+        userDetaiInfo: {},
+        userId: ''
+    }
+
+    methods = {
+        async submitUserDetaiInfo(e) {
+            var that = this
+            var obj = e.detail.value
+            var str = ''
+            for (var val in obj) {
+                str += val;
+                str += '='
+                str += obj[val]
+                str += '&'
+            }
+            str = str.substring(0, str.length - 1)
+            console.log(str);
+            wx.showModal({
+                title: '提示',
+                content: '确认提交?',
+                success: function(res) {
+                    if (res.confirm) {
+                        try {
+                            wepy.request({
+                                url: api.user.editInfo.url + that.userId,
+                                method: api.user.editInfo.method
+                            })
+                            wx.showToast({
+                                title: '提交成功',
+                                icon: '../resources//icons/plus',
+                                duration: 1000
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+        }
+    }
+    async onLoad() {
+        try {
+            let userInfo = await wepy.getStorage({
+                key: 'userInfo'
+            })
+            let userId = await wepy.getStorage({
+                key: 'userId'
+            })
+            this.userId = userId.data
+            let userDetaiInfo = await wepy.request({
+                url: api.user.userInfo.url + userId.data,
+                method: api.user.userInfo.method
+            })
+            this.userDetaiInfo = userDetaiInfo.data
+            this.userInfo = userInfo.data
+            this.$apply()
+
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
+}
+</script>

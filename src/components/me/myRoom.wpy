@@ -115,7 +115,13 @@
                 <text>预约</text>
             </view>
             <view class="item-right">
-
+                <view class="bookInfo">
+                    <text>{{appointData.appointCustoms[0].name}}</text>
+                    <text>{{appointData.appointCustoms[0].author}}</text>
+                </view>
+                <view class="bookImg">
+                    <image class="bookimgurl" src="{{appointData.appointCustoms[0].imageurl}}"></image>
+                </view>
             </view>
         </view>
     </view>
@@ -123,36 +129,52 @@
 <script>
 import wepy from 'wepy'
 import { api } from '../../config'
+import login from '../mixins/login'
 export default class myRoom extends wepy.component {
 
     data = {
         borrowData: {
+
+        },
+        appointData: {
 
         }
     }
     methods = {
 
     }
+    events = {
 
+    }
+    mixins = [login]
+
+    againLoad() {
+        this.onLoad();
+    }
     async onLoad() {
-        let userId = await wepy.getStorage({
-            key: 'userId'
-        })
+
         try {
+            await this.getStoreById()
+            console.log(this.userId, 'from myRoom')
             // 借阅
             let lendBooks = await wepy.request({
-                url: api.lendBook.getLendBooks.url + userId.data,
+                url: api.lendBook.getLendBooks.url + this.userId,
                 method: api.lendBook.getLendBooks.method
             })
             this.borrowData = lendBooks.data
 
             // 藏书
             let collectBooks = await wepy.request({
-                url: api.collectBook.getCollectBook.url + userId.data,
+                url: api.collectBook.getCollectBook.url + this.userId,
                 method: api.collectBook.getCollectBook.method
             })
 
-            //
+            // 预约
+            let appointBooks = await wepy.request({
+                url: api.appointBook.getAppointBook.url + this.userId,
+                method: api.appointBook.getAppointBook.method
+            })
+            this.appointData = appointBooks.data
             this.collectData = collectBooks.data
             this.$apply()
         } catch (error) {
@@ -161,5 +183,6 @@ export default class myRoom extends wepy.component {
 
         console.log('me-myRoom')
     }
+
 }
 </script>
