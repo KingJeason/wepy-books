@@ -59,7 +59,8 @@ export default class Index extends wepy.page {
     }
 
     onShow() {
-        this.currentTab = 0
+        console.log('index show')
+        this.$invoke('bagcar','onLoad')
     }
     onLoad() {
         console.log('index页面加载')

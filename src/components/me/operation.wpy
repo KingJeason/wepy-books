@@ -53,7 +53,7 @@
             <image class="icon" src="../resources/icons/zl.png"></image>
             <text class="text">完善资料</text>
         </view>
-        <view class="item">
+        <view class="item" @tap="gotoDongtai">
             <image class="icon" src="../resources/icons/msg.png"></image>
             <text class="text">动态</text>
             <view class="mynum">
@@ -64,7 +64,7 @@
 </template>
 <script>
 import wepy from 'wepy'
-import login from '../mixins/login';
+// import login from '../mixins/login'
 export default class operation extends wepy.component {
 
     data = {
@@ -72,16 +72,15 @@ export default class operation extends wepy.component {
     }
     methods = {
         gotoEditInfo() {
-            this.getStoreData()
-            if (!this.mIsLogin) {
-                return false
-            } else {
-                wepy.navigateTo({
-                    url: 'editInfo'
-                })
-            }
+            wepy.navigateTo({
+                url: 'editInfo'
+            })
+        },
+        gotoDongtai() {
+
         }
     }
+
     onLoad() {
 
         console.log('me-operation')

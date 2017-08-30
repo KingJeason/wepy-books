@@ -84,7 +84,7 @@
                         </view>
                         <text class="book-list-footer">位置:{{item.location}}</text>
                     </view>
-                    <image data-isbn="{{item.isbn}}" data-bookid="{{item.id}}" data-typeid="{{item.typeId}}" bindtap="gotodetail" src="{{item.imageurl}}"></image>
+                    <image  @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}')" src="{{item.imageurl}}"></image>
                 </view>
             </view>
         </block>
@@ -99,6 +99,12 @@ export default class rank extends wepy.component {
         hootBooks: []
     }
     methods = {
+        gotodetail(isbn, typeId, id) {
+            console.log(isbn, typeId, id)
+            wepy.navigateTo({
+                url: 'bookDetail?isbn=' + isbn + '&typeId=' + typeId + '&id=' + id
+            })
+        }
     }
 
     async onLoad() {

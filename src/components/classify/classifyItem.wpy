@@ -73,8 +73,8 @@
             <text>{{type.name}}</text>
         </view>
         <view class="category-main">
-            <block wx:for="{{type.data.bookTypeCustoms}}" wx:key="{{index}}" >
-                <view  wx:if="{{index < 24}}" class="category-goods-items {{index%3==1?'middle':''}}" data-index="{{index}}" data-name="{{item.title}}" bindtap="onThemeItemTap">
+            <block wx:for="{{type.data.bookTypeCustoms}}" wx:key="{{index}}">
+                <view wx:if="{{index < 24}}" class="category-goods-items {{index%3==1?'middle':''}}" data-index="{{index}}" data-name="{{item.title}}" bindtap="onThemeItemTap">
                     <image src="../resources/icons/{{item.parentId}}/{{item.id}}.png" mode="aspectFill"></image>
                     <view>{{item.typeName}}</view>
                 </view>
@@ -97,7 +97,7 @@ export default class classifyItem extends wepy.component {
         url: ['../resources/icons/wenhua/', '../resources/icons/liuxing/', '../resources/icons/wenxue/', '../resources/icons/shenghuo/', '../resources/icons/jingguan/', '../resources/icons/keji/']
     }
     methods = {
-        onThemeItemTap(e){
+        onThemeItemTap(e) {
             console.log(e)
         }
     }

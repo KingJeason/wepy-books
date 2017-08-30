@@ -20,8 +20,8 @@
         justify-content: center;
         align-items: center;
         image {
-            width: 150rpx;
-            height: 150rpx;
+            width: 12vh;
+            height: 12vh;
             border-radius: 50%;
             margin-right: 40rpx;
             border: 8rpx solid white;
@@ -72,7 +72,8 @@
 
 <script>
 import wepy from 'wepy'
-import interfaces from '../../interfaces/index'
+import store from '../../utils/storage'
+// import interfaces from '../../interfaces/index'
 export default class Me extends wepy.component {
 
     components = {
@@ -85,19 +86,28 @@ export default class Me extends wepy.component {
     }
 
     methods = {
-        userInfoHandler(e) {
-            if (e.errMsg !== "getUserInfo:fail auth deny"){
-                this.userInfo = JSON.parse(e.detail.rawData)
+        async userInfoHandler(e) {
+            if (e.errMsg !== 'getUserInfo:fail auth deny') {
+                let userInfo = JSON.parse(e.detail.rawData)
+                await store.setStorage({
+                    'userInfo': userInfo,
+                })
                 this.isLogin = true
+                this.userInfo = userInfo
                 this.$apply()
             }
         }
     }
     async onLoad() {
         try {
-
+            let userInfo = await wepy.getStorage({
+                key: 'userInfo'
+            })
+            this.userInfo = userInfo.data
+            this.isLogin = true
+            this.$apply()
         } catch (error) {
-
+            this.isLogin = false
         }
 
     }

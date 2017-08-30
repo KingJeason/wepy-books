@@ -24,6 +24,7 @@ export default class Me extends wepy.component {
     }
 
     data = {
+
     }
 
     methods = {

@@ -110,13 +110,13 @@ export default class EditInfo extends wepy.page {
             var obj = e.detail.value
             var str = ''
             for (var val in obj) {
-                str += val;
+                str += val
                 str += '='
                 str += obj[val]
                 str += '&'
             }
             str = str.substring(0, str.length - 1)
-            console.log(str);
+            console.log(str)
             wx.showModal({
                 title: '提示',
                 content: '确认提交?',

@@ -1,0 +1,236 @@
+<style lang="scss">
+.appointment {
+    /* pages/mylend2/mylend2.wxss */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .toptop {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+    .toptop text {
+        font-family: 'KaiTi';
+        font-size: 20px;
+    }
+    .wrap_rel {
+        margin-top: 16rpx;
+        box-sizing: border-box;
+        padding: 16rpx;
+        width: 100%;
+        .rel {
+            box-sizing: border-box;
+            display: flex;
+            padding: 20rpx;
+            border: 1px solid #CFCFCF;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            height: 25vh;
+            .rel-left {
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+            }
+            image {
+                width: 30%;
+                height: 100%;
+            }
+            .rel_info {
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                text {
+                    margin-bottom: 10px;
+                }
+                >text:nth-child(1) {
+                    font-family: 'SimHei';
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+                >text:nth-child(2) {
+                    font-family: 'SimHei';
+                    font-size: 14px;
+                    color: #A3A3A3;
+                }
+                >text:nth-child(3) {
+                    font-family: 'SimHei';
+                    font-size: 14px;
+                    color: #A3A3A3;
+                    line-height: 20px;
+                }
+            }
+
+            icon {
+                margin-right: 10px;
+            }
+        }
+
+        .rel_title {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'SimHei';
+            font-size: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+            .check {
+                display: flex;
+                align-items: center;
+            }
+            .check icon {
+                margin-left: 10rpx;
+            }
+        }
+    }
+    .cancel {
+        width: 50%;
+        height: 20px;
+        padding: 12px;
+        font-size: 15px;
+        line-height: 20px;
+        font-weight: bold;
+        margin-right: 20px;
+        border-radius: 5px;
+        text-align: center;
+        background: #ff7700;
+        color: white;
+    }
+}
+</style>
+<template>
+    <view class="appointment">
+        <view class="toptop" wx:if="{{count == 0}}">
+            <text>您当前没有借阅任何图书哦</text>
+        </view>
+        <view class="wrap_rel" wx:if="{{count > 0}}">
+            <view class="rel_title">
+                <text>我的预约</text>
+                <view class="check">
+                    <text bindtap="CheckAll">全选</text>
+                    <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
+                </view>
+            </view>
+            <block wx:for="{{books}}" wx:key="{{index}}">
+                <view class="rel">
+                    <view class="rel-left">
+                        <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
+                        <view class="rel_info">
+                            <text>{{item.name}}</text>
+                            <text>预约日期: {{item.appointmentTime}}</text>
+                            <text>截止日期: {{item.cancelTime}} </text>
+                        </view>
+                    </view>
+
+                    <image src="{{item.imageurl}}"></image>
+                </view>
+            </block>
+        </view>
+
+        <view class="cancel" bindtap="cancelOrder" wx:if="{{count > 0}}">取消预约</view>
+
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import login from '../components/mixins/login'
+import { api } from '../config'
+export default class appointment extends wepy.page {
+    config = {
+        'navigationBarTitleText': '我的预约',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        count: '',
+        books: {},
+        allCheck: false,
+        check: []
+    }
+    mixins = [login]
+
+    methods = {
+        CheckAll() {
+            this.allCheck = !this.allCheck
+            let array = new Array(this.count)
+            array.fill(this.allCheck)
+            this.check = array
+            this.$apply()
+        },
+        CheckItem(index) {
+            this.check[index] = !this.check[index]
+        },
+        cancelOrder() {
+            var isCheck = this.check.some((item) => {
+                return item == true
+            })
+            if (!isCheck) {
+                wx.showModal({
+                    title: '提示',
+                    content: '请选择要取消预约的书籍~',
+                })
+                return false
+            }
+            wx.showModal({
+                title: '提示',
+                content: '是否取消预约?',
+                success: async (res) => {
+                    let str = ''
+                    for (let i = 0; i < this.check.length; i++) {
+                        if (this.check[i]) {
+                            str += `&book=${this.books[i].bookId}`
+                        }
+                    }
+                    str = str.slice(1);
+                    try {
+                        await wepy.request({
+                            url: `${api.appointBook.cancleAppointBooks.url}/${this.userId}/?${str}`,
+                            method: api.appointBook.cancleAppointBooks.method
+                        })
+                    } catch (error) {
+
+                    }
+                }
+            })
+        }
+    }
+
+    onShow() {
+
+    }
+    async onLoad() {
+        // 通过mixins获取userId
+        await this.getStoreById()
+        let books = await wepy.request({
+            url: `${api.appointBook.getAppointBook.url}/${this.userId}`,
+            method: api.appointBook.getAppointBook.method
+        })
+        console.log(books)
+        let array = books.data.appointCustoms
+        for (let i = 0; i < array.length; i++) {
+            array[i].cancelTime = this.formatDate(array[i].cancelTime)
+            // array[i].appointmentTime = this.formatDate(array[i].formatDate)
+        }
+        this.count = books.data.dataCount
+        let fillArray = new Array(books.data.dataCount)
+        this.check = fillArray.fill(false)
+        this.books = array
+        this.$apply()
+    }
+    formatDate(date) {
+        let unixTimestamp = new Date(date);
+        return unixTimestamp.toLocaleString();
+    }
+
+}
+</script>

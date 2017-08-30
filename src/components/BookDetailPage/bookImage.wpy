@@ -3,7 +3,8 @@
     box-sizing: border-box;
     display: flex;
     height: 50vh;
-    background-color: rgb(34, 16, 16);
+    // background-color: rgb(34, 16, 16);
+    background-color:rgba(255,119,0,0.6);
     flex-direction: column;
     justify-content: center;
     align-items: center;

@@ -62,7 +62,7 @@ export default class classifyIndex extends wepy.component {
     }
     methods = {
         changeCategory(index) {
-            this.currentMenuIndex = index;
+            this.currentMenuIndex = index
         }
     }
 

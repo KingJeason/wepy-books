@@ -94,17 +94,17 @@ export default class bookInfo extends wepy.component {
                     method: api.common.bookCount.method
                 })
                 this.count = data.data
+                this.$invoke('../bookOperation', 'getCount', data.data.bookCount, data.data.bookBorrowCount)
                 this.rank = this.getRating(book.rating.average / 2)
                 this.$emit('loadComplete', true)
                 this.$apply()
             } catch (e) {
-
+                console.log(e)
             }
 
         }
     }
     async onLoad() {
-
         console.log('BookDetail-info')
     }
     getRating(rating) {

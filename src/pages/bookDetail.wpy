@@ -26,7 +26,7 @@ export default class BookDetail extends wepy.page {
     config = {
         'navigationBarTitleText': '书籍详情',
         'navigationBarTextStyle': 'white',
-        'navigationBarBackgroundColor': '#3b3a40'
+        'navigationBarBackgroundColor': '#ff7700'
     }
 
     components = {

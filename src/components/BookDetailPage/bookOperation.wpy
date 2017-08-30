@@ -4,53 +4,204 @@
     height: 20vh;
     display: flex;
     padding: 10%;
-    .unactive {
-        border: 1px solid yellow;
+    .box {
         height: 20px;
         padding: 12px;
         font-size: 15px;
         line-height: 20px;
-        color: #EEB422;
         font-weight: bold;
         margin-right: 20px;
         border-radius: 5px;
         flex: 1;
         text-align: center;
     }
+    .unactive {
+        border: 2rpx solid yellow;
+        color: #EEB422;
+    }
+    .active {
+        border: 2rpx solid #ff7700;
+        color: white;
+        background: #ff7700
+    }
 }
 </style>
 <template>
     <view class="operation">
-        <view class="unactive">
+        <view class="box {{state.isCollect  ? ' active' : 'unactive'}}">
             收藏
         </view>
-        <view class="unactive">
-            借阅
+        <view class="box {{state.isInCar  ? ' active' : 'unactive'}}" @tap="lendBook">
+            {{state.isInCar ? '已借阅' : '借阅'}}
         </view>
-        <view class="unactive">
+        <view class="box {{state.isAppoint  ? ' active' : 'unactive'}}" @tap="orderBook">
             预约
         </view>
     </view>
 </template>
 <script>
 import wepy from 'wepy'
+import login from '../mixins/login'
+import { api } from '../../config'
 export default class bookOperation extends wepy.component {
 
     components = {
 
     }
     data = {
+        state: {
+            isCollect: false,
+            isInCar: false,
+            isAppoint: false
+        },
+        bookId: '',
+        count: {
+            bookCount: '',
+            bookBorrowCount: ''
+        }
+    }
+    mixins = [login]
+    methods = {
+        async lendBook() {
+            if (this.state.isInCar) {
+                wx.showModal({
+                    title: '提示',
+                    content: `该书已经在您的书包里了哦~`
+                })
+                return
+            }
+            if (this.count.bookBorrowCount === 0) {
+                wx.showModal({
+                    title: '提示',
+                    content: `该书的可借数量为0,您可以预约此书,若此书有库存,我们会在第一时间通知您~`
+                })
+                return
+            }
+
+            wx.showModal({
+                title: '提示',
+                content: '确认借阅此书',
+                success: async (res) => {
+                    if (res.confirm) {
+                        try {
+                            await wepy.request({
+                                url: `${api.lendBook.insertToCar.url}/${this.userId}/${this.bookId}`,
+                                method: api.lendBook.insertToCar.method
+                            })
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else {
+                        return false
+                    }
+                }
+            })
+        },
+        async orderBook() {
+
+            if (this.state.isAppoint) {
+                wx.showModal({
+                    title: '提示',
+                    content: `您已经预约了该书哦~`
+                })
+                return
+            }
+
+            if (this.count.bookBorrowCount === 0) {
+                wx.showModal({
+                    title: '提示',
+                    content: '该书可借数量为0,是否推送消息?,设置为推送后,此书若有库存,我们将第一时间提醒向您提醒',
+                    success: async (res) => {
+                        if (res.confirm) {
+                            try {
+                                await wepy.request({
+                                    url: `${api.appointBook.addSendBookMsg.url}/${this.userId}/${this.bookId}`,
+                                    method: api.appointBook.addSendBookMsg.method
+                                })
+                                wx.showToast({
+                                    title: '成功设置推送消息',
+                                    icon: 'success',
+                                    duration: 2000
+                                })
+                                return true
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        } else {
+                            return false
+                        }
+                    }
+                })
+            }
+            if (this.count.bookBorrowCount > 0) {
+                wx.showModal({
+                    title: '提示',
+                    content: '是否预约此书?',
+                    success: async (res) => {
+                        if (res.confirm) {
+                            try {
+                                await wepy.request({
+                                    url: `${api.appointBook.addAAppointment.url}/${this.userId}/${this.bookId}`,
+                                    method: api.appointBook.addAAppointment.method
+                                })
+                                wx.showToast({
+                                    title: '成功预约此书',
+                                    icon: 'success',
+                                    duration: 2000
+                                })
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        } else {
+                            return false
+                        }
+                    }
+                })
+            }
+        }
 
     }
-    methods = {
-    }
     events = {
-        'bookData': (data) => {
+        'bookData': async (data, bookId) => {
+            this.bookId = bookId
+            this.$apply()
+            // 通过mixins里获取userId
+            await this.getStoreById()
+            // 查询是否收藏,借阅,预约
+            await this.checkOutState()
+
             this.$emit('loadComplete', true)
         }
     }
-    onLoad() {
+    async onLoad() {
         console.log('BookDetail-Operation')
+    }
+    async checkOutState() {
+        // 查询是否收藏,借阅,预约
+        try {
+            let isCollect = await wepy.request({
+                url: api.collectBook.isCollect.url + this.userId + '/' + this.bookId,
+                method: api.collectBook.isCollect.method
+            })
+            let isInCar = await wepy.request({
+                url: api.lendBook.isInCar.url + this.userId + '/' + this.bookId,
+                method: api.lendBook.isInCar.method
+            })
+            let isAppoint = await wepy.request({
+                url: api.appointBook.isAppoint.url + this.userId + '/' + this.bookId,
+                method: api.appointBook.isAppoint.method
+            })
+            this.state.isCollect = isCollect.data.issuccess
+            this.state.isInCar = isInCar.data.issuccess
+            this.state.isAppoint = isAppoint.data.issuccess
+            this.$apply()
+        } catch (error) {
+
+        }
+    }
+    getCount(bookCount, bookBorrowCount) {
+        this.count.bookCount = bookCount
+        this.count.bookBorrowCount = bookBorrowCount
     }
 }
 </script>

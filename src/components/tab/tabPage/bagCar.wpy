@@ -1,19 +1,192 @@
-<style type="scss">
+<style lang="scss">
+.bagCar {
+    .icon {
+        height: 50rpx;
+        width: 50rpx;
+        z-index: 999;
+        margin-right: 16rpx
+    } // padding-top: 10vh;
+    .footer {
+        box-sizing: border-box;
+        background: white;
+        height: 10vh;
+        width: 100%;
+        bottom: 10vh;
+        box-sizing: border-box;
+        display: flex;
+        z-index: 10;
+        .footer-left {
+            padding: 16rpx;
+            box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .footer-left-box {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                color: grey;
+                font-size: 28rpx;
+            }
+            .footer-right-box {
+                font-size: 36rpx;
+                font-weight: bold;
+            }
+        }
+        .footer-right {
+            background-image: linear-gradient(to right, #ff7700, #FFFACD);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20rpx;
+            font-family: 'SimHei';
+            font-size: 30rpx;
+            color: white;
+        }
+    }
+    .header {
+        z-index: 10;
 
+        box-sizing: border-box;
+        background: white;
+        height: 10vh;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        justify-content: center;
+        padding: 16rpx;
+        border-bottom: 2rpx solid lightgray;
+        .header-info {
+            flex: 1;
+            display: flex;
+            font-size: 28rpx;
+            font-weight: bold;
+            justify-content: flex-start;
+            align-items: center;
+            letter-spacing: 1rpx;
+        }
+    }
+    .content {
+        height: 70vh;
+        box-sizing: border-box;
+        .icon {
+            z-index: 0;
+        }
+        .content-box {
+            background: white;
+            box-sizing: border-box;
+            height: 25vh;
+            padding: 16rpx;
+            display: flex;
+            border-bottom: 2rpx solid lightgray;
+            .content-box-left {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .content-box-right {
+                flex: 1;
+                display: flex;
+                .bookimg {
+                    width: 200rpx;
+                    height: 100%;
+                    margin-right: 40rpx;
+                }
+                .bookInfo {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                    box-sizing: border-box;
+                    text {
+                        margin-bottom: 8rpx;
+                    }
+                    text:nth-child(1) {
+                        font-size: 30rpx;
+                    }
+                    text:nth-child(2) {
+                        font-size: 28rpx;
+                        color: lightgray;
+                    }
+                    text:nth-child(3) {
+                        font-size: 28rpx;
+                        color: lightgray;
+                    }
+                    text:nth-child(4) {
+                        font-size: 28rpx;
+                        color: #ff7700;
+                    }
+                    text:nth-child(5) {
+                        font-size: 34rpx;
+                        color: red;
+                    }
+                }
+            }
+        }
+    }
+}
 </style>
 <template>
+    <view class="bagCar">
+        <view class="header">
+            <view class='header-info'>
+                <image class="icon" src="../resources/icons/allselect.png"></image>
+                <text>您当前还可以借阅0本</text>
+            </view>
+            <text style="font-size:28rpx; ">编辑</text>
+        </view>
+        <scroll-view scroll-y style="height: 70vh;">
+            <view class="content">
+                <block wx:for="{{carBooks}}" wx:key="{{index}}">
+                    <view class="content-box">
+                        <view class="content-box-left">
+                            <image class="icon" src="../resources/icons/allselect.png"></image>
+                        </view>
+                        <view class="content-box-right">
+                            <image class="bookimg" src="{{item.imageurl}}"></image>
+                            <view class="bookInfo">
+                                <text>{{item.name}}</text>
+                                <text>{{item.author}}</text>
+                                <text>{{item.publish}}</text>
+                                <text>{{item.isbn}}</text>
+                                <text>¥ 20</text>
+                            </view>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </scroll-view>
 
+        <view class="footer">
+            <view class="footer-left">
+                <view class="footer-left-box">
+                    <image class="icon" src="../resources/icons/allselect.png"></image>
+                    <text>全选</text>
+                </view>
+                <text class="footer-right-box">合计 0</text>
+            </view>
+            <view class="footer-right">
+                生成借书二维码
+            </view>
+        </view>
+    </view>
 </template>
 <script>
 import wepy from 'wepy'
 // import interfaces from '../../../interfaces/index'
 import login from '../../mixins/login'
+import { api } from '../../../config'
 export default class Message extends wepy.component {
 
     components = {
 
     }
     data = {
+        carBooks: [],
+
     }
     methods = {
     }
@@ -21,13 +194,21 @@ export default class Message extends wepy.component {
 
     async onLoad() {
         try {
+            // 获取用户id
             await this.getStoreById()
-            console.log(this.userId,'from bagCar')
+
+            // 获取购物车书籍
+            let carBooks = await wepy.request({
+                url: api.lendBook.getBooksFromCar.url + this.userId,
+                method: api.lendBook.getBooksFromCar.method
+            })
+            this.carBooks = carBooks.data.cart_Lend_BookCustoms
             this.$apply()
         } catch (error) {
-
+            consoel.log(error);
         }
         console.log('bagCar')
     }
+
 }
 </script>

@@ -75,32 +75,50 @@ const api = {
         getLendBooks: {
             method: 'GET',
             url: '/getLendBooks/'
+        },
+        getBooksFromCar: {
+            url: '/getBooksFromCar/',
+            method: 'GET'
+        },
+        isInCar: {
+            url: '/isCarTheBook/',
+            method: 'GET'
+        },
+        insertToCar: {
+            url: '/insertToCart/',
+            method: 'POST'
         }
     },
     collectBook: {
         getCollectBook: {
             method: 'GET',
             url: '/getCollectBooks/'
+        },
+        isCollect: {
+            method: 'GET',
+            url: '/isCollectTheBook/'
         }
     },
     appointBook: {
-        getAppointBook:{
+        getAppointBook: {
             method: 'GET',
             url: '/getAppointBooks/'
-        }
-    },
-    notifications: {
-        count: {
-            method: 'GET',
-            url: '/v2/notifications'
         },
-        messages: {
+        isAppoint: {
             method: 'GET',
-            url: '/v2/notifications/messages'
+            url: '/isAppointTheBook/'
         },
-        read: {
-            method: 'PUT',
-            url: '/v2/notifications'
+        addSendBookMsg: {
+            method: 'POST',
+            url: '/addSendBookMsg/'
+        },
+        addAAppointment: {
+            method: 'POST',
+            url: '/addAAppointment/'
+        },
+        cancleAppointBooks: {
+            url: '/cancleAppointBooks/',
+            method: 'DELETE'
         }
     },
     configs: {
