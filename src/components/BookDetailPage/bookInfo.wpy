@@ -79,7 +79,7 @@ export default class bookInfo extends wepy.component {
     }
     data = {
         book: [],
-        count: [],
+        count: {},
         rank: ''
     }
     methods = {
@@ -87,6 +87,15 @@ export default class bookInfo extends wepy.component {
     events = {
         'bookData': async (book, id) => {
             this.book = book
+            this.rank = this.getRating(book.rating.average / 2)
+            if (!id) {
+                this.count.bookCount = '未上架'
+                this.count.bookBorrowCount = '未上架'
+                this.$apply()
+                this.$emit('loadComplete', true)
+                console.log('info加载完成')
+                return false
+            }
             this.bookId = id
             try {
                 let data = await wepy.request({
@@ -95,7 +104,6 @@ export default class bookInfo extends wepy.component {
                 })
                 this.count = data.data
                 this.$invoke('../bookOperation', 'getCount', data.data.bookCount, data.data.bookBorrowCount)
-                this.rank = this.getRating(book.rating.average / 2)
                 this.$emit('loadComplete', true)
                 this.$apply()
             } catch (e) {

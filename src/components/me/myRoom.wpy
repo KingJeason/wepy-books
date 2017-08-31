@@ -81,20 +81,20 @@
         </view>
         <view class="item">
             <view class="item-left">
-                <text>{{borrowData.dateCount}}</text>
+                <text>{{collectData.datacount}}</text>
                 <text>总藏书</text>
             </view>
             <view class="item-right">
                 <view class="bookInfo">
-                    <text>{{borrowData.lendBookCustoms[0].name}}</text>
-                    <text>{{borrowData.lendBookCustoms[0].author}}</text>
+                    <text>{{collectData.collectCustoms[0].name}}</text>
+                    <text>{{collectData.collectCustoms[0].author}}</text>
                 </view>
                 <view class="bookImg">
-                    <image class="bookimgurl" src="{{borrowData.lendBookCustoms[0].imageurl}}"></image>
+                    <image class="bookimgurl" src="{{collectData.collectCustoms[0].imageurl}}"></image>
                 </view>
             </view>
         </view>
-        <view class="item">
+        <view class="item" @tap="gotoLend">
             <view class="item-left">
                 <text>{{borrowData.dateCount}}</text>
                 <text>我的借阅</text>
@@ -111,8 +111,8 @@
         </view>
         <view class="item" @tap="gotoAppointment">
             <view class="item-left">
-                <text>3</text>
-                <text>预约</text>
+                <text>{{appointData.dataCount}}</text>
+                <text>我的预约</text>
             </view>
             <view class="item-right">
                 <view class="bookInfo">
@@ -138,12 +138,20 @@ export default class myRoom extends wepy.component {
         },
         appointData: {
 
+        },
+        collectData: {
+
         }
     }
     methods = {
         gotoAppointment() {
             wepy.navigateTo({
                 url: 'appointment'
+            })
+        },
+        gotoLend() {
+            wepy.navigateTo({
+                url: 'lendRoom'
             })
         }
     }
@@ -159,13 +167,12 @@ export default class myRoom extends wepy.component {
 
         try {
             await this.getStoreById()
-            console.log(this.userId, 'from myRoom')
             // 借阅
             let lendBooks = await wepy.request({
                 url: api.lendBook.getLendBooks.url + this.userId,
                 method: api.lendBook.getLendBooks.method
             })
-            this.borrowData = lendBooks.data
+
 
             // 藏书
             let collectBooks = await wepy.request({
@@ -180,6 +187,7 @@ export default class myRoom extends wepy.component {
             })
             this.appointData = appointBooks.data
             this.collectData = collectBooks.data
+            this.borrowData = lendBooks.data
             this.$apply()
         } catch (error) {
             console.log('me-书籍出错', error)

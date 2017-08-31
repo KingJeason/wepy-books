@@ -55,7 +55,7 @@
         </view>
         <view class="item" @tap="gotoDongtai">
             <image class="icon" src="../resources/icons/msg.png"></image>
-            <text class="text">动态</text>
+            <text class="text">我的消息</text>
             <view class="mynum">
                 3
             </view>

@@ -1,6 +1,6 @@
 <style lang="scss">
 .bagCar {
-    .icon {
+    icon {
         height: 50rpx;
         width: 50rpx;
         z-index: 999;
@@ -128,48 +128,80 @@
         }
     }
 }
+
+.bagCar-wrap {
+    position: relative;
+    height: 90vh;
+    width: 100%;
+}
+
+.barCode {
+    position: absolute;
+    top: calc(50% - 25vh);
+    left: calc(50% - 40vw);
+    .barCodeWarp {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    image {
+        width: 80vw;
+        height: 50vh;
+        margin-bottom: 20rpx;
+    }
+    icon {}
+}
 </style>
 <template>
-    <view class="bagCar">
-        <view class="header">
-            <view class='header-info'>
-                <image class="icon" src="../resources/icons/allselect.png"></image>
-                <text>您当前还可以借阅0本</text>
+    <view class="bagCar-wrap">
+        <view class="bagCar" wx:if="{{!barCode.show}}">
+            <view class="header">
+                <view class='header-info'>
+                    <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
+                    <text>您当前还可以借阅{{canBorrowCount}}本</text>
+                </view>
+                <text style="font-size:28rpx; ">编辑</text>
             </view>
-            <text style="font-size:28rpx; ">编辑</text>
-        </view>
-        <scroll-view scroll-y style="height: 70vh;">
-            <view class="content">
-                <block wx:for="{{carBooks}}" wx:key="{{index}}">
-                    <view class="content-box">
-                        <view class="content-box-left">
-                            <image class="icon" src="../resources/icons/allselect.png"></image>
-                        </view>
-                        <view class="content-box-right">
-                            <image class="bookimg" src="{{item.imageurl}}"></image>
-                            <view class="bookInfo">
-                                <text>{{item.name}}</text>
-                                <text>{{item.author}}</text>
-                                <text>{{item.publish}}</text>
-                                <text>{{item.isbn}}</text>
-                                <text>¥ 20</text>
+            <scroll-view scroll-y style="height: 70vh;">
+                <view class="content">
+                    <block wx:for="{{carBooks}}" wx:key="{{index}}">
+                        <view class="content-box">
+                            <view class="content-box-left">
+                                <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
+                            </view>
+                            <view class="content-box-right">
+                                <image class="bookimg" src="{{item.imageurl}}"></image>
+                                <view class="bookInfo">
+                                    <text>{{item.name}}</text>
+                                    <text>{{item.author}}</text>
+                                    <text>{{item.publish}}</text>
+                                    <text>isbn: {{item.isbn}}</text>
+                                    <text>¥ 20</text>
+                                </view>
                             </view>
                         </view>
-                    </view>
-                </block>
-            </view>
-        </scroll-view>
-
-        <view class="footer">
-            <view class="footer-left">
-                <view class="footer-left-box">
-                    <image class="icon" src="../resources/icons/allselect.png"></image>
-                    <text>全选</text>
+                    </block>
                 </view>
-                <text class="footer-right-box">合计 0</text>
+            </scroll-view>
+
+            <view class="footer">
+                <view class="footer-left">
+                    <view class="footer-left-box">
+                        <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
+                        <text>全选</text>
+                    </view>
+                    <text class="footer-right-box">合计 0</text>
+                </view>
+                <view class="footer-right" @tap="borrowBook">
+                    生成借书二维码
+                </view>
             </view>
-            <view class="footer-right">
-                生成借书二维码
+        </view>
+        <view class="barCode" wx:if="{{barCode.show}}">
+            <view class="barCodeWarp">
+                <image src="{{barCode.url}}"></image>
+                <icon @tap="cancel" type="cancel" size="40" />
             </view>
         </view>
     </view>
@@ -186,9 +218,77 @@ export default class Message extends wepy.component {
     }
     data = {
         carBooks: [],
+        allCheck: false,
+        check: [],
+        count: '',
+        canBorrowCount: '',
+        barCode: {
+            show: false,
+            url: ''
+        },
+
 
     }
     methods = {
+        CheckAll() {
+            this.allCheck = !this.allCheck
+            let array = new Array(this.count)
+            array.fill(this.allCheck)
+            this.check = array
+            this.$apply()
+        },
+        CheckItem(index) {
+            this.check[index] = !this.check[index]
+        },
+        borrowBook() {
+            if (this.canBorrowCount === 0) {
+                wx.showToast({
+                    title: `您当前可借书的数量为${this.canBorrowCount}`,
+                    icon: '../resources/icons/plus.png',
+                    duration: 2000
+                })
+                return false
+            }
+            let isCheck = this.check.some((item) => {
+                return item === true
+            })
+            if (!isCheck) {
+                wx.showToast({
+                    title: `请选择要借阅的书籍`,
+                    icon: '../resources/icons/plus.png',
+                    duration: 2000
+                })
+                return false
+            }
+            let str = '',
+                str1 = '',
+                checkNum = 0
+            this.check.forEach((item, index) => {
+                if (item) {
+                    str += '$book=' + this.carBooks[index].bookId + '$costmoney=' + '20'
+                    str1 += "$book=" + this.carBooks[index].bookId
+                    checkNum += 1;
+                }
+            })
+            str = str.slice(1)
+            str1 = str1.slice(1)
+            console.log(str, str1, checkNum, this.canBorrowCount)
+            if (checkNum > this.canBorrowCount) {
+                wx.showToast({
+                    title: `您当前可借书的数量为${this.canBorrowCount}`,
+                    icon: '../resources/icons/plus.png',
+                    duration: 2000
+                })
+                return false
+            }
+
+            this.barCode.url = "http://qr.liantu.com/api.php?text=" + this.userId + "/?" + str + '!?' + str1
+            this.barCode.show = true
+            this.$apply()
+        },
+        cancel() {
+            this.onLoad()
+        }
     }
     mixins = [login]
 
@@ -202,10 +302,22 @@ export default class Message extends wepy.component {
                 url: api.lendBook.getBooksFromCar.url + this.userId,
                 method: api.lendBook.getBooksFromCar.method
             })
+            // 获取已借阅数量
+            let lendBooks = await wepy.request({
+                url: api.lendBook.getLendBooks.url + this.userId,
+                method: api.lendBook.getLendBooks.method
+            })
+            let canBorrowCount = 2 - lendBooks.data.dateCount
+            let count = carBooks.data.dataCount
+            let fillArray = new Array(count)
+            this.canBorrowCount = canBorrowCount
+            this.count = count
+            this.check = fillArray.fill(false)
             this.carBooks = carBooks.data.cart_Lend_BookCustoms
+            this.barCode.show = false
             this.$apply()
         } catch (error) {
-            consoel.log(error);
+            console.log(error);
         }
         console.log('bagCar')
     }

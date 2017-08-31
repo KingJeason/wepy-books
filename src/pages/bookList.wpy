@@ -38,16 +38,16 @@
 </style>
 <template>
     <view class="bookList">
-        <block wx:for="{{books}}" wx:index="{{index}}" wx:key="{{index}}">
+        <block wx:for="{{books}}" wx:key="{{index}}">
             <view class="item-list">
-                <view class="item" bindtap="gotodetail" data-index="{{index}}" data-typeid="{{item.typeId}}">
-                    <view class="left" data-index="{{index}}" data-typeid="{{item.typeId}}">
-                        <image src="{{item.imageurl}}" data-index="{{index}}" data-typeid="{{item.typeId}}"></image>
+                <view class="item" @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}')">
+                    <view class="left">
+                        <image src="{{item.imageurl}}"></image>
                     </view>
-                    <view class="right" data-index="{{index}}" data-typeid="{{item.typeId}}">
-                        <text data-index="{{index}}" data-typeid="{{item.typeId}}">{{item.name}}</text>
-                        <text data-index="{{index}}" data-typeid="{{item.typeId}}">{{item.author}}</text>
-                        <text data-index="{{index}}" data-typeid="{{item.typeId}}"> {{item.publish}}</text>
+                    <view class="right">
+                        <text>{{item.name}}</text>
+                        <text>{{item.author}}</text>
+                        <text> {{item.publish}}</text>
                     </view>
                 </view>
             </view>
@@ -60,7 +60,7 @@ import wepy from 'wepy'
 import { api } from '../config'
 export default class BookList extends wepy.page {
     config = {
-        'navigationBarTitleText': '详情',
+        'navigationBarTitleText': '',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#3b3a40'
     }
@@ -72,6 +72,11 @@ export default class BookList extends wepy.page {
     }
 
     methods = {
+        gotodetail(isbn, typeId, id) {
+            wepy.navigateTo({
+                url: 'bookDetail?isbn=' + isbn + '&typeId=' + typeId + '&id=' + id
+            })
+        }
     }
 
     onShow() {
@@ -99,6 +104,15 @@ export default class BookList extends wepy.page {
                         'Content-Type': 'json'
                     },
                 })
+                wx.setNavigationBarTitle({
+                    title: params.title
+                })
+            } else if (params.typeId) {
+                books = await wepy.request({
+                    url: api.common.relevant.url + params.typeId,
+                    method: api.common.relevant.method
+                })
+                console.log(books)
             }
             this.books = books.data.books
             this.$apply()

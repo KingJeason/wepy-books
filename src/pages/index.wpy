@@ -61,6 +61,8 @@ export default class Index extends wepy.page {
     onShow() {
         console.log('index show')
         this.$invoke('bagcar','onLoad')
+        this.$invoke('me/userInfo','onLoad')
+        this.$invoke('me/myRoom','onLoad')
     }
     onLoad() {
         console.log('index页面加载')

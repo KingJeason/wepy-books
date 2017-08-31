@@ -14,7 +14,7 @@ export default class Query extends wepy.page {
     config = {
         'navigationBarTitleText': '搜索',
         'navigationBarTextStyle': 'white',
-        'navigationBarBackgroundColor': '#3b3a40'
+        'navigationBarBackgroundColor': '#ff7700'
     }
 
     components = {

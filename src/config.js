@@ -95,8 +95,13 @@ const api = {
             url: '/getCollectBooks/'
         },
         isCollect: {
-            method: 'GET',
+            method: 'POST',
             url: '/isCollectTheBook/'
+        },
+        insertOrDeleteCollect: {
+            method: 'POST',
+            url: '/insertOrDeleteCollect/'
+
         }
     },
     appointBook: {
@@ -105,7 +110,7 @@ const api = {
             url: '/getAppointBooks/'
         },
         isAppoint: {
-            method: 'GET',
+            method: 'POST',
             url: '/isAppointTheBook/'
         },
         addSendBookMsg: {
@@ -118,7 +123,7 @@ const api = {
         },
         cancleAppointBooks: {
             url: '/cancleAppointBooks/',
-            method: 'DELETE'
+            method: 'PUT'
         }
     },
     configs: {

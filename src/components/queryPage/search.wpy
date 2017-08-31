@@ -34,10 +34,10 @@
         margin-right: 0;
         margin-left: 8px;
         color: #fff;
-        background-color: orange;
+        background-color: #ff7700;
         width: 50px;
         height: 30px;
-        border-radius: 30px;
+        border-radius: 40px;
         font-size: 14px;
         text-align: center;
         line-height: 30px;
@@ -91,6 +91,46 @@
         color: gray;
     }
 }
+
+.history {
+    padding: 16rpx;
+    box-sizing: border-box;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16rpx;
+        text {
+            color: lightgray;
+            font-size: 30rpx;
+            font-family: 'SimHei'
+        }
+        image {
+            width: 50rpx;
+            height: 50rpx;
+        }
+    }
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        .historyItem {
+            box-sizing: border-box;
+            height: 60rpx;
+            padding: 10rpx;
+            border-radius: 15rpx;
+            background: #FAFAFA;
+            color: black;
+            font-size: 28rpx;
+            font-family: 'SiHei';
+            margin-right: 16rpx;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16rpx;
+        }
+    }
+}
 </style>
 <template>
     <view class="queryTop">
@@ -98,7 +138,7 @@
             <image @tap="backToIndex" class="icon" src="../resources/icons/left.png">
             </image>
             <view class="input">
-                <input type="text" @input="inputChange" value='{{inputValue}}' placeholder="请输入关键字" placeholder-style=" color:#666666;font-size: 13px;font-family: 'SimHei';text-align:center">
+                <input type="text" @input="inputChange" value='{{inputValue}}' placeholder="请输入关键字/全拼/isbn" placeholder-style=" color:#666666;font-size: 13px;font-family: 'SimHei';text-align:center">
                 <icon wx:if="{{clearShow}}" @tap="clearInput" class="clear" type="clear" size="30" />
             </view>
             <button @tap="queryBook">搜索</button>
@@ -106,21 +146,32 @@
         <view class="book-show" wx:if="{{clearShow}}">
             <view class="book-list">
                 <block wx:for="{{searchBooks.books}}" wx:if="{{index < 3}}" wx:key="{{index}}">
-                    <view hover-class="hover-item" data-index="{{index}}" data-count="{{item.count}}" bindtap="book_detail" hover-start-time="200" class="book-list-item">
-                        <view data-index="{{index}}" hover-start-time="200" class="book-list-left">
-                            <image data-index="{{index}}" class="book-list-image" hover-start-time="200" mode="aspectFit" src="{{item.imageurl}}"></image>
+                    <view hover-class="hover-item" @tap="gotodetail('{{item.isbn}}','{{item.typeId}}','{{item.id}}','{{item.name}}')" hover-start-time="200" class="book-list-item">
+                        <view hover-start-time="200" class="book-list-left">
+                            <image class="book-list-image" hover-start-time="200" mode="aspectFit" src="{{item.imageurl}}"></image>
                         </view>
-                        <view data-index="{{index}}" hover-start-time="200" class="book-list-right">
-                            <text data-index="{{index}}" hover-start-time="200" class="book-list-right-style">{{item.name}}\n</text>
-                            <text data-index="{{index}}" hover-start-time="200" class="book-list-right-style1">{{item.rating.average}}/{{item.author}}\n</text>
-                            <text data-index="{{index}}" hover-start-time="200" class="book-list-right-style1">馆藏数量: {{item.count}}</text>
+                        <view hover-start-time="200" class="book-list-right">
+                            <text hover-start-time="200" class="book-list-right-style">{{item.name}}\n</text>
+                            <text hover-start-time="200" class="book-list-right-style1">{{item.rating.average}}/{{item.author}}\n</text>
+                            <text hover-start-time="200" class="book-list-right-style1">馆藏数量: {{item.count}}</text>
                         </view>
                     </view>
                 </block>
             </view>
-            <view class="foot" bindtap="morebook">
+            <view class="foot" bindtap="queryBook">
                 <text>查看更多图书</text>
                 <text>></text>
+            </view>
+        </view>
+        <view class="history" wx:if="{{!clearShow}}">
+            <view class="header">
+                <text>历史记录</text>
+                <image src="../resources/icons/delete.png" @tap="clearHistory"></image>
+            </view>
+            <view class="content">
+                <block wx:for="{{historyArray}}" wx:key="{{index}}">
+                    <text class="historyItem" @tap="queryBookByHistory('{{item}}')">{{item}}</text>
+                </block>
             </view>
         </view>
     </view>
@@ -135,7 +186,8 @@ export default class search extends wepy.component {
         inputValue: '',
         searchBooks: [],
         lastTime: '',
-        flag: false
+        flag: false,
+        historyArray: []
     }
     methods = {
         inputChange(e) {
@@ -154,14 +206,44 @@ export default class search extends wepy.component {
         },
         queryBook() {
             // console.log(this.$pages)
+            this.setHistory()
             wepy.navigateTo({
                 url: 'bookList?searchValue=' + this.inputValue
+            })
+
+        },
+        queryBookByHistory(name) {
+            wepy.navigateTo({
+                url: 'bookList?searchValue=' + name
             })
         },
         backToIndex() {
             wepy.navigateBack({
                 delta: 1
             })
+        },
+        gotodetail(isbn, typeId, id, bookName) {
+            this.setHistory(bookName)
+            wepy.navigateTo({
+                url: 'bookDetail?isbn=' + isbn + '&typeId=' + typeId + '&id=' + id
+            })
+        },
+        clearHistory() {
+            wx.showModal({
+                title: '提示',
+                content: '确认删除历史记录?',
+                success: (res) => {
+                    if (res.confirm) {
+                        this.historyArray = []
+                        this.$apply()
+                        wx.setStorageSync('historyArray', [])
+                    } else {
+                        return false
+                    }
+                }
+            })
+
+
         }
 
     }
@@ -183,9 +265,14 @@ export default class search extends wepy.component {
     }
 
     async onLoad() {
+        this.getHistory()
         console.log('queryPage-searchHearder')
     }
-
+    onShow() {
+        this.getHistory()
+        this.inputValue = ''
+        this.$apply()
+    }
     throttle(method, time, delay, duration) {
         var begin = time
         var that = this
@@ -209,6 +296,19 @@ export default class search extends wepy.component {
             str = ''
         }
         return str.replace(/(^\s*)|(\s*$)/g, '')
+    }
+    getHistory() {
+        let historyArray = wx.getStorageSync('historyArray') || []
+        this.historyArray = historyArray
+    }
+    setHistory(name) {
+        let array = this.historyArray
+        if (array.length > 10) {
+            array.pop()
+        }
+        array.unshift(name || this.inputValue)
+        this.historyArray = array
+        wx.setStorageSync('historyArray', array)
     }
 }
 </script>

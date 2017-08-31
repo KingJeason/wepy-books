@@ -101,10 +101,10 @@
                 <image src="../../resources/icons/right.png"></image>
             </view>
         </view>
-        <view class="wrap_rel">
+        <view class="wrap_rel" wx:if={{isShow}}>
             <view class="rel_title">
                 <text>相关推荐</text>
-                <text bindtap="gotomore">点击更多</text>
+                <text bindtap="gotoBookList">点击更多</text>
             </view>
             <view class="rel">
 
@@ -130,20 +130,35 @@ export default class bookDetailInfo extends wepy.component {
     }
     data = {
         book: [],
-        relevantBook: []
+        relevantBook: [],
+        isShow: false,
+        typeId: ''
 
     }
     methods = {
+        gotoBookList() {
+            wepy.navigateTo({
+                url: `bookList?typeId=${this.typeId}`
+            })
+        }
     }
     events = {
         'bookData': async (book, id, typeId) => {
             this.book = book
+            if (!typeId) {
+                this.$emit('loadComplete', true)
+                console.log('相关加载完成')
+                this.$apply()
+                return false
+            }
             try {
                 let relevantBook = await wepy.request({
                     url: api.common.relevant.url + typeId,
                     method: api.common.relevant.method
                 })
                 this.relevantBook = relevantBook.data
+                this.typeId = typeId
+                this.isShow = true
                 this.$emit('loadComplete', true)
                 this.$apply()
             } catch (error) {

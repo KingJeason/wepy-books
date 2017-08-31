@@ -34,6 +34,7 @@ export default class bookImage extends wepy.component {
         'bookData': (data) => {
             this.book = data
             this.$emit('loadComplete', true)
+            console.log('图片加载完成')
         }
     }
     onLoad() {

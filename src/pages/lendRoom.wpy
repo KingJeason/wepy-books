@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-.appointment {
+.lendRoom {
     /* pages/mylend2/mylend2.wxss */
     display: flex;
     justify-content: center;
@@ -103,14 +103,27 @@
         color: white;
     }
 }
+
+.barCode {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    image {
+        width: 80vw;
+        height: 50vh;
+    }
+}
 </style>
 <template>
     <view>
-        <view class="appointment">
+        <view class="lendRoom" wx:if="{{!barCode.show}}">
 
             <view class="wrap_rel" wx:if="{{count > 0}}">
                 <view class="rel_title">
-                    <text>我的预约</text>
+                    <text>我的借阅</text>
                     <view class="check">
                         <text bindtap="CheckAll">全选</text>
                         <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
@@ -122,8 +135,8 @@
                             <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
                             <view class="rel_info">
                                 <text>{{item.name}}</text>
-                                <text>预约日期: {{item.appointmentTime}}</text>
-                                <text>截止日期: {{item.cancelTime}} </text>
+                                <text>借阅日期: {{item.lendTime}}</text>
+                                <text>归还日期: {{item.shouldReturnTime}} </text>
                             </view>
                         </view>
 
@@ -132,11 +145,16 @@
                 </block>
             </view>
 
-            <view class="cancel" bindtap="cancelOrder" wx:if="{{count > 0}}">取消预约</view>
+            <view class="cancel" bindtap="returnBook" wx:if="{{count > 0}}">生成还书二维码</view>
 
         </view>
         <view class="toptop" wx:if="{{count === 0}}">
-            <text>您当前没有预约任何图书哦</text>
+            <text>您当前没有借阅任何图书哦</text>
+        </view>
+
+        <view class="barCode" wx:if="{{barCode.show}}">
+            <image src="{{barCode.url}}"></image>
+            <icon @tap="cancel" type="cancel" size="40" />
         </view>
 
     </view>
@@ -144,28 +162,55 @@
 
 <script>
 import wepy from 'wepy'
-import login from '../components/mixins/login'
 import { api } from '../config'
-export default class appointment extends wepy.page {
+import login from '../components/mixins/login'
+export default class lendRoom extends wepy.page {
     config = {
-        'navigationBarTitleText': '我的预约',
+        'navigationBarTitleText': '我的借阅',
         'navigationBarTextStyle': 'white',
         'navigationBarBackgroundColor': '#ff7700'
     }
 
     components = {
-
     }
-
     data = {
+        books: [],
         count: '',
-        books: {},
         allCheck: false,
-        check: []
+        check: [],
+        barCode: {
+            show: false,
+            url: ''
+        },
+
     }
-    mixins = [login]
 
     methods = {
+        returnBook() {
+            let isCheck = this.check.some((item) => {
+                return item == true
+            })
+            if (!isCheck) {
+                wx.showModal({
+                    title: '提示',
+                    content: '请选择要借阅的书籍~',
+                })
+                return false
+            }
+            let str3 = 'http://qr.liantu.com/api.php?text=' + this.userId + '/?',
+                str = ''
+            this.check.forEach((item, index) => {
+                if (item) {
+                    str += '$book=';
+                    str += this.books[index].bookId
+                }
+            })
+            str = str.slice(1);
+            str = str3 + str + '!?' + str;
+            this.barCode.url = str
+            this.barCode.show = true
+
+        },
         CheckAll() {
             this.allCheck = !this.allCheck
             let array = new Array(this.count)
@@ -176,61 +221,29 @@ export default class appointment extends wepy.page {
         CheckItem(index) {
             this.check[index] = !this.check[index]
         },
-        cancelOrder() {
-            let isCheck = this.check.some((item) => {
-                return item == true
-            })
-            if (!isCheck) {
-                wx.showModal({
-                    title: '提示',
-                    content: '请选择要取消预约的书籍~',
-                })
-                return false
-            }
-            wx.showModal({
-                title: '提示',
-                content: '是否取消预约?',
-                success: async (res) => {
-                    let str = ''
-                    for (let i = 0; i < this.check.length; i++) {
-                        if (this.check[i]) {
-                            str += `&book=${this.books[i].bookId}`
-                        }
-                    }
-                    str = str.slice(1);
-                    try {
-                        await wepy.request({
-                            url: `${api.appointBook.cancleAppointBooks.url}/${this.userId}/?${str}`,
-                            method: api.appointBook.cancleAppointBooks.method
-                        })
-                    } catch (error) {
-
-                    }
-                }
-            })
+        cancel() {
+            this.onLoad()
         }
     }
-
-    onShow() {
-
-    }
+    mixins = [login]
     async onLoad() {
-        // 通过mixins获取userId
         await this.getStoreById()
-        let books = await wepy.request({
-            url: `${api.appointBook.getAppointBook.url}/${this.userId}`,
-            method: api.appointBook.getAppointBook.method
+        // 借阅
+        let lendBooks = await wepy.request({
+            url: api.lendBook.getLendBooks.url + this.userId,
+            method: api.lendBook.getLendBooks.method
         })
-        console.log(books)
-        let array = books.data.appointCustoms
+        console.log(lendBooks)
+        let array = lendBooks.data.lendBookCustoms
         for (let i = 0; i < array.length; i++) {
-            array[i].cancelTime = this.formatDate(array[i].cancelTime)
-            // array[i].appointmentTime = this.formatDate(array[i].formatDate)
+            array[i].lendTime = this.formatDate(array[i].lendTime)
+            array[i].shouldReturnTime = this.formatDate(array[i].shouldReturnTime)
         }
-        this.count = books.data.dataCount
-        let fillArray = new Array(books.data.dataCount)
+        this.count = lendBooks.data.dateCount
+        let fillArray = new Array(lendBooks.data.dateCount)
         this.check = fillArray.fill(false)
         this.books = array
+        this.barCode.show = false
         this.$apply()
     }
     formatDate(date) {

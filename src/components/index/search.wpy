@@ -53,6 +53,15 @@ export default class search extends wepy.component {
             this.$root.$navigate({
                 url: 'query'
             })
+        },
+        saoyisao() {
+            wx.scanCode({
+                success: (res) => {
+                    wx.navigateTo({
+                        url: 'bookDetail?isbn=' + res.result
+                    })
+                }
+            })
         }
     }
 
