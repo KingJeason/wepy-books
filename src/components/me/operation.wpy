@@ -45,7 +45,7 @@
 </style>
 <template>
     <view class="operation">
-        <view class="item">
+        <view class="item" @tap="gotoChat">
             <image class="icon" src="../resources/icons/robot.png"></image>
             <text class="text">客服</text>
         </view>
@@ -56,19 +56,21 @@
         <view class="item" @tap="gotoDongtai">
             <image class="icon" src="../resources/icons/msg.png"></image>
             <text class="text">我的消息</text>
-            <view class="mynum">
-                3
+            <view class="mynum" wx:if="{{count > 0}}">
+                {{count}}
             </view>
         </view>
     </view>
 </template>
 <script>
 import wepy from 'wepy'
+import { api } from '../../config'
+import login from '../mixins/login'
 // import login from '../mixins/login'
 export default class operation extends wepy.component {
 
     data = {
-
+        count: 0
     }
     methods = {
         gotoEditInfo() {
@@ -77,13 +79,69 @@ export default class operation extends wepy.component {
             })
         },
         gotoDongtai() {
+            wepy.navigateTo({
+                url: 'message'
+            })
+        },
+        gotoChat() {
+            wepy.navigateTo({
+                url: `chat`
+            })
+        },
+    }
+    watch = {
+        count(newValue, oldValue) {
+            if(newValue > 0){
+                let com = this.$root.$com.index.$com.search
 
+                this.$invoke(com, 'RemindToShow')
+            }
         }
     }
-
-    onLoad() {
-
+    mixins = [login]
+    async onLoad() {
+        await this.getStoreById()
+        await this.getSendBooks()
+        await this.getAllRecentOutDateBooks()
+        await this.getAllOutDateBooks()
+        this.$apply()
         console.log('me-operation')
+    }
+    // 获取推送
+    async  getSendBooks() {
+        let books = await wepy.request({
+            url: `${api.message.getSendBooks.url}/${this.userId}`,
+            method: api.message.getSendBooks.method
+        })
+        let count
+        if (books.data.sendBookMsgCustoms === null) {
+            count = 0
+        } else {
+            count = books.data.sendBookMsgCustoms.length
+        }
+        this.count += count
+        console.log('推送:', books)
+
+    }
+    // 获取近七日内要归还的图书
+    async getAllRecentOutDateBooks() {
+        let books = await wepy.request({
+            url: `${api.message.getAllRecentOutDateBooks.url}/${this.userId}`,
+            method: api.message.getAllRecentOutDateBooks.method
+        })
+        let count = books.data.dateCount
+        this.count += count
+        console.log('归还:', books)
+    }
+    // 获取已超期的图书
+    async getAllOutDateBooks() {
+        let books = await wepy.request({
+            url: `${api.message.getAllOutDateBooks.url}/${this.userId}`,
+            method: api.message.getAllOutDateBooks.method
+        })
+        let count = books.data.dateCount
+        this.count += count
+        console.log('超期:', books)
     }
 }
 </script>

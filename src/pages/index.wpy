@@ -64,7 +64,10 @@ export default class Index extends wepy.page {
         this.$invoke('me/userInfo','onLoad')
         this.$invoke('me/myRoom','onLoad')
     }
-    onLoad() {
+    onLoad(params) {
+        if(typeof params.tab !== 'undefined'){
+            this.currentTab = params.tab
+        }
         console.log('index页面加载')
     }
 

@@ -37,6 +37,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            margin-right: 200rpx;
             text:first-child {
                 font-family: 'SimHei';
                 font-size: 50rpx;
@@ -46,6 +47,18 @@
                 font-family: 'SimHei';
                 font-size: 30rpx;
                 color: white
+            }
+        }
+
+        .personShow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text {
+                font-family: 'SimHei';
+                font-size: 28rpx;
+                color: white;
             }
         }
     }
@@ -60,6 +73,10 @@
                 <view class="nameCity">
                     <text>{{userInfo.nickName}}</text>
                     <text>{{userInfo.city}}</text>
+                </view>
+                <view class="personShow">
+                    <switch checked="{{personShow}}" bindchange="personChange" color="#ff7700" />
+                    <text>个性化推荐</text>
                 </view>
             </view>
             <view class="info" wx:if="{{!isLogin}}">
@@ -82,7 +99,8 @@ export default class Me extends wepy.component {
 
     data = {
         userInfo: {},
-        isLogin: false
+        isLogin: false,
+        personShow: true
     }
 
     methods = {
@@ -96,6 +114,9 @@ export default class Me extends wepy.component {
                 this.userInfo = userInfo
                 this.$apply()
             }
+        },
+        personChange(e) {
+            wx.setStorageSync('personShow', e.detail.value)
         }
     }
     async onLoad() {
@@ -103,6 +124,13 @@ export default class Me extends wepy.component {
             let userInfo = await wepy.getStorage({
                 key: 'userInfo'
             })
+            let Person = wx.getStorageSync('personShow')
+            console.log(Person)
+            if (Person !== '') {
+                this.personShow = Person
+            } else {
+                this.personShow = true
+            }
             this.userInfo = userInfo.data
             this.isLogin = true
             this.$apply()

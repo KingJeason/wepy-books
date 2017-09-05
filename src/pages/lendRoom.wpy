@@ -4,6 +4,16 @@
     height: 100vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    image{
+        width: 50%;
+       height: 100rpx;
+       margin-bottom: 20rpx;
+    }
+    text{
+        font-family: 'SimHei';
+        font-size: 30rpx;
+    }
 }
 
 .lendRoom {
@@ -136,7 +146,7 @@
                             <view class="rel_info">
                                 <text>{{item.name}}</text>
                                 <text>借阅日期: {{item.lendTime}}</text>
-                                <text>归还日期: {{item.shouldReturnTime}} </text>
+                                <text>应还日期: {{item.shouldReturnTime}} </text>
                             </view>
                         </view>
 
@@ -148,8 +158,9 @@
             <view class="cancel" bindtap="returnBook" wx:if="{{count > 0}}">生成还书二维码</view>
 
         </view>
-        <view class="toptop" wx:if="{{count === 0}}">
-            <text>您当前没有借阅任何图书哦</text>
+       <view class="toptop" wx:if="{{count === 0}}">
+           <image src="../resources/images/book.jpg"></image>
+           <text>您还没有借阅任何图书哦</text>
         </view>
 
         <view class="barCode" wx:if="{{barCode.show}}">
@@ -193,7 +204,7 @@ export default class lendRoom extends wepy.page {
             if (!isCheck) {
                 wx.showModal({
                     title: '提示',
-                    content: '请选择要借阅的书籍~',
+                    content: '请选择要归还的书籍~',
                 })
                 return false
             }
@@ -234,7 +245,7 @@ export default class lendRoom extends wepy.page {
             method: api.lendBook.getLendBooks.method
         })
         console.log(lendBooks)
-        let array = lendBooks.data.lendBookCustoms
+        let array = lendBooks.data.lendBookCustoms || []
         for (let i = 0; i < array.length; i++) {
             array[i].lendTime = this.formatDate(array[i].lendTime)
             array[i].shouldReturnTime = this.formatDate(array[i].shouldReturnTime)

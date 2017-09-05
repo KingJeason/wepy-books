@@ -1,0 +1,237 @@
+<style lang="scss">
+.input {
+    color: #7b7b7b;
+    position: fixed;
+    bottom: 0;
+    height: 100rpx;
+    width: 100%;
+    border-top: 1px solid #d8d8d8;
+    background-color: #ededed;
+    font-size: 22rpx;
+}
+
+.input .input_layout {
+    position: relative;
+}
+
+.input .input_layout .input_icon {
+    position: absolute;
+    width: 90rpx;
+    height: 90rpx;
+}
+
+.input .input_layout .input_icon.voice {
+    left: 20rpx;
+}
+
+.input .input_layout .input_icon.face {
+    right: 120rpx;
+}
+
+.input .input_layout .input_icon.plus {
+    right: 20rpx;
+}
+
+.input .input_layout .input_text {
+    border-bottom: 1px solid #d8d8d8;
+    margin-left: 120rpx;
+    margin-right: 240rpx;
+    height: 80rpx;
+    font-size: 32rpx;
+    color: #000;
+}
+
+.input .input_layout .input_text.focus {
+    border-bottom: 1px solid #9bb793;
+}
+
+.input .input_layout .send {
+    background-color: #14b012;
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+    border: 1px solid #378c37;
+    border-radius: 5rpx;
+    right: 20rpx;
+    width: 90rpx;
+    height: 74rpx;
+    line-height: 72rpx;
+    color: white;
+    text-align: center;
+    font-size: 30rpx;
+    margin-top: 8rpx;
+}
+
+.input .input_layout .send.hidden {
+    display: none;
+}
+
+.chartboard {
+    background-color: white;
+    padding-bottom: 120rpx;
+}
+
+.chartboard.fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+}
+
+.chartboard .msgarea {
+    padding: 20rpx 10rpx;
+}
+
+.chartboard .msgarea .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.chartboard .msgarea .clearfix {
+    height: 1%;
+}
+
+.chartboard .msgarea .msg {
+    border: 1px solid #d8d8d8;
+    font-size: 32rpx;
+    display: inline-block;
+    padding: 14rpx 20rpx;
+    max-width: 450rpx;
+    border-radius: 15rpx;
+}
+
+.chartboard .msgarea .icon {
+    width: 70rpx;
+    height: 70rpx;
+}
+
+.chartboard .msgarea.fromme .msg {
+    background-color: #9fe757;
+    float: right;
+    margin-right: 10rpx;
+}
+
+.chartboard .msgarea.fromme .icon {
+    float: right;
+    margin-right: 10rpx;
+}
+
+.chartboard .msgarea.other .msg {
+    background-color: #fff;
+    float: left;
+    margin-left: 10rpx;
+}
+
+.chartboard .msgarea.other .icon {
+    float: left;
+    margin-left: 10rpx;
+}
+</style>
+<template>
+    <view class="body page_chat">
+        <scroll-view style="height: calc(100vh - 100rpx);" scroll-y="true" class="chartboard" scroll-into-view="{{idid}}">
+            <block wx:for="{{arr}}" wx:key="index" wx:key="{{index}}">
+                <view id="id{{index}}" class="msgarea{{item.from === 'me' ? ' fromme' : ' other'}}">
+                    <image class="icon" src="{{item.icon}}" />
+                    <text class="msg">{{item.msg}}</text>
+                    <view class="clearfix" />
+                </view>
+            </block>
+        </scroll-view>
+
+        <view class="input">
+            <view class="input_layout">
+                <!--<image class="input_icon voice" src="../../resources/icons/voice.png" />-->
+                <!--<image class="input_icon face" src="../../resources/icons/face.png" />-->
+                <image class="input_icon plus" src="../resources/icons/plus.png" />
+                <view class="send {{input_value.length == 0 ? 'hidden' : ''}}" @tap="sendmsg">发送</view>
+                <input bindinput="gogo" value="{{input_value}}" class="input_text " bindfocus="addfix" bindblur="remfix" bindtype="$myinput$input" />
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { api } from '../config'
+export default class Chat extends wepy.page {
+    config = {
+        'navigationBarTitleText': '客服',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        arr: [
+            {
+                from: 'other',
+                icon: '../resources/icons/robot.png',
+                msg: '1.借书流程\n2.还书流程\n3.预约流程\n4.动态须知'
+            }
+        ],
+        idid: '',
+        input_value: '',
+        imgUrl: ''
+    }
+
+    methods = {
+        async  sendmsg() {
+
+            if (this.input_value === '') {
+                return
+            }
+            let res = await wepy.request({
+                url: `${api.common.getChatMessage.url}/${this.input_value}`,
+                method: api.common.getChatMessage.method,
+            })
+            console.log(res)
+            let newArr = this.arr
+            let lg = newArr.length
+            newArr.push({
+                from: 'me',
+                icon: this.imgUrl,
+                msg: this.input_value
+            })
+            newArr.push({
+                from: 'other',
+                icon: '../resources/icons/robot.png',
+                msg: res.data.text
+            })
+            this.arr = newArr
+            this.input_value = ''
+            this.idid = 'id' + lg
+            this.$apply()
+        },
+        addfix() {
+            this.fix = 'fixed'
+        },
+        remfix() {
+            this.fix = ''
+        },
+        gogo(e) {
+            this.input_value = e.detail.value
+        }
+    }
+    onLoad() {
+        this.getUserImg()
+    }
+    getUserImg() {
+        let userImg = wx.getStorageSync('userInfo').avatarUrl
+        let imgUrl
+        if (typeof userImg === 'undefined') {
+            imgUrl = '../resources/icons/user.png'
+        } else {
+            imgUrl = userImg
+        }
+        this.imgUrl = imgUrl
+        this.$apply()
+    }
+}
+</script>

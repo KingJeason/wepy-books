@@ -78,6 +78,59 @@
             }
         }
     }
+    .bookview {
+        white-space: nowrap;
+        padding: 20px;
+        scroll-view {
+            height: 360px;
+            white-space: nowrap;
+        }
+        scroll-view .fuck {
+            display: inline-block;
+        }
+        .book-title {
+            font-family: 'SimHei';
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .fuck {
+            margin-top: 10px;
+            padding: 15px;
+            width: 540rpx;
+            height: 80%;
+            border-radius: 10px;
+            background-color: white;
+            margin-right: 15px;
+            overflow: hidden;
+            white-space: normal;
+            font-family: 'SimHei';
+            box-shadow: 2px 2px 2px #696969;
+            border:2rpx solid lightgray
+        }
+        .abc {
+            display: flex;
+            flex-direction: column;
+            height: 80%;
+        }
+        .fuck1 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            line-height: 26px;
+        }
+        .fuck1>text:nth-child(1) {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .fuck1>text:nth-child(2) {
+            font-size: 15px;
+        }
+        .bookview_auth {
+            font-size: 13px;
+            color: lightslategray;
+        }
+    }
 }
 </style>
 <template>
@@ -118,6 +171,24 @@
             </view>
 
         </view>
+        <view class="bookview">
+            <text class="book-title">读书笔记</text>
+            <scroll-view scroll-x="true">
+                <block wx:for="{{noteBook}}" wx:key="{{index}}">
+                    <view class="fuck" bindtap="gotonote" data-index="{{index}}">
+                        <view class="abc" data-index="{{index}}">
+                            <view class="fuck1" data-index="{{index}}">
+                                <text data-index="{{index}}">{{item.chapter}}</text>
+                                <text data-index="{{index}}"> {{item.abstract}}</text>
+                            </view>
+
+                            <text class="bookview_auth" data-index="{{index}}"> {{item.author_user.name}}</text>
+                        </view>
+
+                    </view>
+                </block>
+            </scroll-view>
+        </view>
     </view>
 </template>
 <script>
@@ -132,7 +203,8 @@ export default class bookDetailInfo extends wepy.component {
         book: [],
         relevantBook: [],
         isShow: false,
-        typeId: ''
+        typeId: '',
+        noteBook: []
 
     }
     methods = {
@@ -152,19 +224,33 @@ export default class bookDetailInfo extends wepy.component {
                 return false
             }
             try {
-                let relevantBook = await wepy.request({
-                    url: api.common.relevant.url + typeId,
-                    method: api.common.relevant.method
-                })
-                this.relevantBook = relevantBook.data
-                this.typeId = typeId
-                this.isShow = true
+                await this.getRelevantBook(typeId)
+                await this.getNoteBook(book.id)
                 this.$emit('loadComplete', true)
                 this.$apply()
             } catch (error) {
                 console.log('相关图书出错')
             }
         }
+    }
+    async getRelevantBook(typeId) {
+        let relevantBook = await wepy.request({
+            url: api.common.relevant.url + typeId,
+            method: api.common.relevant.method
+        })
+        this.relevantBook = relevantBook.data
+        this.typeId = typeId
+        this.isShow = true
+    }
+    async getNoteBook(id) {
+        let res = await wepy.request({
+            url: `https://api.douban.com/v2/book/${id}/annotations`,
+            header: {
+                "Content-Type": "json"
+            }
+        })
+        this.noteBook = res.data.annotations
+        this.$apply()
     }
     async onLoad() {
 

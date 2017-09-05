@@ -80,7 +80,7 @@
             我的书屋
         </view>
         <view class="item">
-            <view class="item-left">
+            <view class="item-left" @tap="gotoCollect">
                 <text>{{collectData.datacount}}</text>
                 <text>总藏书</text>
             </view>
@@ -144,6 +144,11 @@ export default class myRoom extends wepy.component {
         }
     }
     methods = {
+        gotoCollect() {
+            wepy.navigateTo({
+                url: 'collect'
+            })
+        },
         gotoAppointment() {
             wepy.navigateTo({
                 url: 'appointment'

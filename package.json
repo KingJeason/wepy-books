@@ -12,6 +12,7 @@
   "dependencies": {
     "wepy": "^1.5.8",
     "wepy-async-function": "^1.4.4",
+    "wepy-com-charts": "^v1.0.6",
     "wepy-com-toast": "^1.0.1",
     "wepy-web": "0.0.11"
   },

@@ -4,6 +4,16 @@
     height: 100vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    image{
+        width: 50%;
+       height: 100rpx;
+       margin-bottom: 20rpx;
+    }
+    text{
+        font-family: 'SimHei';
+        font-size: 30rpx;
+    }
 }
 
 .appointment {
@@ -136,7 +146,8 @@
 
         </view>
         <view class="toptop" wx:if="{{count === 0}}">
-            <text>您当前没有预约任何图书哦</text>
+           <image src="../resources/images/book.jpg"></image>
+           <text>您还没有预约任何图书哦</text>
         </view>
 
     </view>
@@ -191,21 +202,25 @@ export default class appointment extends wepy.page {
                 title: '提示',
                 content: '是否取消预约?',
                 success: async (res) => {
-                    let str = ''
-                    for (let i = 0; i < this.check.length; i++) {
-                        if (this.check[i]) {
-                            str += `&book=${this.books[i].bookId}`
+                    if (res.confirm) {
+                        let str = ''
+                        for (let i = 0; i < this.check.length; i++) {
+                            if (this.check[i]) {
+                                str += `&book=${this.books[i].bookId}`
+                            }
+                        }
+                        str = str.slice(1);
+                        try {
+                            await wepy.request({
+                                url: `${api.appointBook.cancleAppointBooks.url}/${this.userId}/?${str}`,
+                                method: api.appointBook.cancleAppointBooks.method
+                            })
+                            this.onLoad()
+                        } catch (error) {
+
                         }
                     }
-                    str = str.slice(1);
-                    try {
-                        await wepy.request({
-                            url: `${api.appointBook.cancleAppointBooks.url}/${this.userId}/?${str}`,
-                            method: api.appointBook.cancleAppointBooks.method
-                        })
-                    } catch (error) {
 
-                    }
                 }
             })
         }

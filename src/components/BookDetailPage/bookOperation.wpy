@@ -7,7 +7,7 @@
     .box {
         height: 20px;
         padding: 12px;
-        font-size: 15px;
+        font-size: 24rpx;
         line-height: 20px;
         font-weight: bold;
         margin-right: 20px;
@@ -32,7 +32,7 @@
             收藏
         </view>
         <view class="box {{state.isInCar  ? ' active' : 'unactive'}}" @tap="lendBook">
-            {{state.isInCar ? '已借阅' : '借阅'}}
+            {{state.isInCar ? '已在书包' : '借阅'}}
         </view>
         <view class="box {{state.isAppoint  ? ' active' : 'unactive'}}" @tap="orderBook">
             预约
@@ -93,9 +93,15 @@ export default class bookOperation extends wepy.component {
                     if (res.confirm) {
                         try {
                             await wepy.request({
-                                url: `${api.lendBook.insertToCar.url}/${this.userId}/${this.bookId}`,
-                                method: api.lendBook.insertToCar.method
+                                url: `${api.lendBook.insertToCar.url}`,
+                                method: api.lendBook.insertToCar.method,
+                                data: {
+                                    userId: this.userId,
+                                    bookId: this.bookId
+                                }
                             })
+                            this.state.isInCar = true
+                            this.$apply()
                         } catch (error) {
                             console.log(error)
                         }
@@ -153,14 +159,16 @@ export default class bookOperation extends wepy.component {
                         if (res.confirm) {
                             try {
                                 await wepy.request({
-                                    url: `${api.appointBook.addAAppointment.url}/${this.userId}/${this.bookId}`,
+                                    url: `${api.appointBook.addAAppointment.url}`,
                                     // url: api.appointBook.addAAppointment.url,
                                     method: api.appointBook.addAAppointment.method,
                                     data: {
-                                        urerId: this.userId,
+                                        userId: this.userId,
                                         bookId: this.bookId
                                     }
                                 })
+                                this.state.isAppoint = true
+                                this.$apply()
                                 wx.showToast({
                                     title: '成功预约此书',
                                     icon: 'success',
@@ -190,8 +198,12 @@ export default class bookOperation extends wepy.component {
                 success: async (res) => {
                     if (res.confirm) {
                         await wepy.request({
-                            url: `${api.collectBook.insertOrDeleteCollect.url}/${this.userId}/${this.bookId}`,
-                            method: api.collectBook.insertOrDeleteCollect.method
+                            url: `${api.collectBook.insertOrDeleteCollect.url}`,
+                            method: api.collectBook.insertOrDeleteCollect.method,
+                            data: {
+                                uid: this.userId,
+                                bid: this.bookId
+                            }
                         })
                         wx.showToast({
                             title: '成功收藏本书',

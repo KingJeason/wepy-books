@@ -62,7 +62,7 @@ export default class BookList extends wepy.page {
     config = {
         'navigationBarTitleText': '',
         'navigationBarTextStyle': 'white',
-        'navigationBarBackgroundColor': '#3b3a40'
+        'navigationBarBackgroundColor': '#ff7700'
     }
 
     components = {

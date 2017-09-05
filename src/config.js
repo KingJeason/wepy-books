@@ -37,6 +37,10 @@ const api = {
         editInfo: {
             url: '/finishUserInfo/',
             method: 'PUT'
+        },
+        findPersonalBooks: {
+            url: '/findPersonalBooks/',
+            method: 'GET'
         }
     },
     common: {
@@ -67,6 +71,10 @@ const api = {
         relevant: {
             method: 'GET',
             url: '/getRelativeBooks/'
+        },
+        getChatMessage: {
+            method: 'GET',
+            url: '/getChatMessage/'
         }
 
 
@@ -87,6 +95,14 @@ const api = {
         insertToCar: {
             url: '/insertToCart/',
             method: 'POST'
+        },
+        deleteBooksFromCar: {
+            url: '/deleteBooksFromCar/',
+            method: 'DELETE'
+        },
+        reBorrow: {
+            url: '/renewTheBook/',
+            method: 'PUT'
         }
     },
     collectBook: {
@@ -101,8 +117,12 @@ const api = {
         insertOrDeleteCollect: {
             method: 'POST',
             url: '/insertOrDeleteCollect/'
-
+        },
+        deleteCollectBooks: {
+            method: 'DELETE',
+            url: '/deleteCollectBooks/'
         }
+
     },
     appointBook: {
         getAppointBook: {
@@ -124,12 +144,27 @@ const api = {
         cancleAppointBooks: {
             url: '/cancleAppointBooks/',
             method: 'PUT'
+        },
+        cancelSendBookMsg:{
+            url: '/cancelSendBookMsg/',
+            method: 'DELETE'
         }
     },
-    configs: {
-        method: 'GET',
-        url: '/v2/configs'
+    message: {
+        getSendBooks: {
+            method: 'GET',
+            url: '/getSendBooks/'
+        },
+        getAllRecentOutDateBooks: {
+            method: 'GET',
+            url: '/getAllRecentOutDateBooks/'
+        },
+        getAllOutDateBooks: {
+            method: 'GET',
+            url: '/getAllOutDateBooks/'
+        }
     }
+
 }
 
 module.exports = {

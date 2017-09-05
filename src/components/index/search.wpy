@@ -1,10 +1,27 @@
 <style lang="scss">
 .search {
     background-color: #ff7700;
-    height: 40px;
+    height: 50px;
     padding: 5px;
     display: flex;
     justify-content: space-between;
+    box-sizing: border-box;
+    .remind {
+        height: 50px;
+        background-color: rgba(77, 77, 77, 0.8);
+        color: white;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        image {
+            width: 50rpx;
+            height: 50rpx;
+        }
+    }
     .icon {
         width: 40px;
         height: 40px;
@@ -13,7 +30,6 @@
         width: 80%;
         background-color: white;
         border-radius: 5px;
-        padding: 3px;
         display: flex;
         position: relative;
         justify-content: center;
@@ -34,6 +50,10 @@
 </style>
 <template>
     <view class="search">
+        <view class="remind" wx:if="{{RemindShow}}" bindtap="ReminToHide">
+            <text>您有最新的动态,请前往个人中心查看</text>
+            <image src="../resources/icons/delete-white.png"></image>
+        </view>
         <view class="header-query">
             <image class="icon" src="../resources/icons/query.png" @tap="gotoquery"></image>
             <text @tap="gotoquery">请输入关键词进行搜索</text>
@@ -46,7 +66,7 @@ import wepy from 'wepy'
 export default class search extends wepy.component {
 
     data = {
-
+        RemindShow: false
     }
     methods = {
         gotoquery() {
@@ -62,6 +82,10 @@ export default class search extends wepy.component {
                     })
                 }
             })
+        },
+        ReminToHide() {
+            this.RemindShow = false
+            this.$apply()
         }
     }
 
@@ -69,5 +93,10 @@ export default class search extends wepy.component {
         this.$emit('indexLoadComplete', true)
         console.log('index-search')
     }
+    RemindToShow() {
+        this.RemindShow = true
+        this.$apply()
+    }
+
 }
 </script>

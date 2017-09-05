@@ -1,0 +1,287 @@
+<style lang="scss">
+.wrap_rel {
+    padding: 15px;
+}
+
+.rel {
+    display: flex;
+    padding: 15px;
+    border: 1px solid #CFCFCF;
+    position: relative;
+}
+
+.rel_title {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'SimHei';
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.rel image {
+    width: 70px;
+    height: 100px;
+    margin-right: 15px;
+}
+
+.rel_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+}
+
+.rel_info text {
+    margin-bottom: 10px;
+}
+
+.rel_info>text:nth-child(1) {
+    font-family: 'SimHei';
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.rel_info>text:nth-child(2) {
+    font-family: 'SimHei';
+    font-size: 14px;
+    color: #A3A3A3;
+}
+
+.rel_info>text:nth-child(3) {
+    font-family: 'SimHei';
+    font-size: 14px;
+    color: #A3A3A3;
+}
+
+.canle_msg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 50px;
+    width: 150rpx;
+    border-radius: 10px;
+    font-family: 'SimHei';
+    font-size: 16px;
+    background: #AEEEEE;
+}
+
+.tishi {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'SimHei';
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+<template>
+    <view>
+        <view class="tishi" wx:if="{{show}}">您当前没有任何动态哦~</view>
+        <view class="wrap_rel" wx:if="{{state.send}}">
+            <view class="rel_title">
+                <text>推送图书</text>
+                <text bindtap="gotomore">您想预约的图书已有库存!</text>
+            </view>
+            <block wx:for="{{book.sendBooks}}" wx:key="{{index}}">
+                <view class="rel">
+                    <button class="canle_msg" @tap="cancelMsg('{{item.id}}')">取消推送</button>
+                    <image src="{{item.imageurl}}"></image>
+                    <view class="rel_info">
+                        <text>{{item.name}}</text>
+                        <text>作者: {{item.author}}</text>
+                        <text>出版社: {{item.publish}} </text>
+                    </view>
+                </view>
+            </block>
+        </view>
+
+        <view class="wrap_rel" wx:if="{{state.recent}}">
+            <view class="rel_title">
+                <text>即将到期图书</text>
+                <text bindtap="gotomore">7日内要归还的图书!</text>
+            </view>
+            <block wx:for="{{book.recentBooks}}" wx:key="{{index}}">
+                <view class="rel">
+                    <button class="canle_msg" @tap="reBorrow('{{item.id}}')">续借</button>
+                    <image src="{{item.imageurl}}"></image>
+                    <view class="rel_info">
+                        <text>{{item.name}}</text>
+                        <text>作者: {{item.author}}</text>
+                        <text>应还日期: {{item.shouldReturnTime}} </text>
+                    </view>
+                </view>
+            </block>
+        </view>
+
+        <view class="wrap_rel" wx:if="{{state.out}}">
+            <view class="rel_title">
+                <text>超期图书</text>
+                <text bindtap="gotomore">超期{{}}</text>
+            </view>
+            <block wx:for="{{book.outBooks}}" wx:key="{{index}}">
+                <view class="rel">
+                    <image src="{{item.imageurl}}"></image>
+                    <view class="rel_info">
+                        <text>{{item.name}}</text>
+                        <text>作者: {{item.author}}</text>
+                        <text>应还日期: {{item.shouldReturnTime}} </text>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { api } from '../config'
+import login from '../components/mixins/login'
+export default class Collect extends wepy.page {
+    config = {
+        'navigationBarTitleText': '我的消息',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+    computed = {
+        show() {
+            return !this.state.send && !this.state.recent && !this.state.out
+        }
+    }
+    data = {
+        book: {
+            sendBooks: [],
+            recentBooks: [],
+            outBooks: []
+        },
+        state: {
+            send: false,
+            recent: false,
+            out: false
+        }
+
+    }
+    mixins = [login]
+
+    methods = {
+        cancelMsg(id) {
+            wx.showModal({
+                title: '提示',
+                content: '确认取消推送该书?',
+                success: async (res) => {
+                    // 确定
+                    if (res.confirm) {
+                        try {
+                            await wepy.request({
+                                url: api.appointBook.cancelSendBookMsg.url + id,
+                                method: api.appointBook.cancelSendBookMsg.method,
+                            })
+                            wx.showToast({
+                                title: '取消成功',
+                                icon: 'success',
+                                duration: 2000
+                            })
+                            this.getSendBooks()
+                        } catch (error) {
+
+                        }
+
+
+                    }
+                }
+            })
+        },
+        reBorrow(id) {
+            wx.showModal({
+                title: '提示',
+                content: '一本书只可续借一次,是否续借?',
+                success: async (res) => {
+                    if (res.confirm) {
+                        // 确定
+                        await wepy.request({
+                            url: api.lendBook.reBorrow.url + this.userId + '/' + id,
+                            method: api.lendBook.reBorrow.method,
+                            // data: {
+                            //     id: id,
+                            //     userId: this.userId
+                            // }
+                        })
+                        wx.showToast({
+                            title: '续借成功',
+                            icon: 'success',
+                            duration: 2000
+                        })
+                        this.getAllRecentOutDateBooks()
+                    }
+                }
+            })
+        }
+    }
+    async onLoad() {
+        await this.getStoreById()
+        this.getSendBooks()
+        this.getAllRecentOutDateBooks()
+        this.getAllOutDateBooks()
+        this.$apply()
+    }
+    // 获取推送
+    async  getSendBooks() {
+        let sendBooks = await wepy.request({
+            url: `${api.message.getSendBooks.url}/${this.userId}`,
+            method: api.message.getSendBooks.method
+        })
+        if (sendBooks.data.success) {
+            this.book.sendBooks = sendBooks.data.sendBookMsgCustoms
+            this.state.send = true
+        } else {
+            this.state.send = false
+        }
+        this.$apply()
+        console.log(sendBooks)
+    }
+    // 获取近七日内要归还的图书
+    async getAllRecentOutDateBooks() {
+        let books = await wepy.request({
+            url: `${api.message.getAllRecentOutDateBooks.url}/${this.userId}`,
+            method: api.message.getAllRecentOutDateBooks.method
+        })
+        if (books.data.message === 'error') {
+            this.state.recent = false
+        } else {
+            let array = books.data.lendBookCustoms
+            array.forEach((item, index) => {
+                item.shouldReturnTime = this.formatDate(item.shouldReturnTime)
+            })
+            this.book.recentBooks = array
+            this.state.recent = true
+        }
+        this.$apply()
+    }
+    // 获取已超期的图书
+    async getAllOutDateBooks() {
+        let books = await wepy.request({
+            url: `${api.message.getAllOutDateBooks.url}/${this.userId}`,
+            method: api.message.getAllOutDateBooks.method
+        })
+        if (books.data.message === '查询成功') {
+            this.state.out = true
+            let array = books.data.lendBookCustoms
+            array.forEach((item, index) => {
+                item.shouldReturnTime = this.formatDate(item.shouldReturnTime)
+            })
+            this.book.outBooks = array
+        } else {
+            this.state.out = false
+        }
+        this.$apply()
+    }
+    formatDate(date) {
+        let unixTimestamp = new Date(date);
+        return unixTimestamp.toLocaleString();
+    }
+
+}
+</script>

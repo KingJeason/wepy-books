@@ -1,0 +1,363 @@
+<style lang="scss">
+/* pages/pay/pay.wxss */
+
+.wrap {
+    position: relative;
+    font-family: 'SimHei'
+}
+
+.tcc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    background-color: rgba(77, 77, 77, .1);
+    box-sizing: border-box;
+}
+
+.tcc_top_wrap {
+    padding: 30rpx;
+    height: 50%;
+    box-sizing: border-box;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    margin: 0px auto;
+    padding: 0px;
+    background-color: #C0FF3E;
+    overflow: hidden;
+}
+
+.tcc_top {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.tcc_top_header {
+    display: flex;
+    height: 35px;
+    align-items: center;
+    padding: 10rpx;
+}
+
+
+.tcc_top_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tcc_top_info>text:first-child {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.tcc_top_info>text:nth-child(2) {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.tcc_top_conent {
+    padding: 10px;
+}
+
+.tcc_kahao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgray;
+    padding: 15px;
+    position: relative;
+}
+
+.tcc_kahao image {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+}
+
+.img1 {
+    left: 10px;
+}
+
+.img2 {
+    right: 10px
+}
+
+.tcc_top_card {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    height: 50px;
+    border: 1px solid grey;
+}
+
+.tcc_top_card view {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid lightgray;
+}
+
+.num {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.tcc_bottom {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    background-color: white
+}
+
+.tcc_bottom image {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+}
+
+.yuan {
+    width: 15px;
+    height: 15px;
+    background-color: black;
+    border-radius: 50%;
+}
+
+.col {
+    display: flex;
+    flex: 1;
+}
+
+.gra {
+    background-color: gray !important;
+}
+
+.col>view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    border-top: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'SimHei';
+}
+
+.dis_n {
+    display: none;
+}
+
+.dis_y {
+    display: block;
+}
+
+.bg_none {
+    background-color: #EDEDED;
+}
+
+.close {
+    width: 30rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
+}
+
+.user {
+    width: 50rpx;
+    height: 50rpx;
+    margin-right: 10rpx;
+}
+</style>
+<template>
+    <view class="wrap">
+        <view class="tcc {{isshow?'dis_y':'dis_n'}}">
+            <view class="tcc_top_wrap">
+                <view class="tcc_top">
+                    <view class="tcc_top_header">
+                        <image class="close" @tap="gotoBagCar" src="../resources/icons/close.png"></image>
+                        <image class="user" src="{{imgUrl}}"></image>
+                        <text>请输入支付密码</text>
+                    </view>
+                    <view class="line"></view>
+                    <view class="tcc_top_conent">
+                        <view class="tcc_top_info">
+                            <text>测试商户</text>
+                            <text>$33</text>
+                        </view>
+                        <view class="tcc_kahao">
+                            <image class="img1" src="../../resources/icons/gongshang.png"></image>
+                            <text>工商银行储蓄卡(4444)</text>
+                            <image class="img2" src="../../resources/icons/right3.png"></image>
+                        </view>
+                        <view class="tcc_top_card">
+                            <view>
+                                <text class="{{array[0]?'yuan':''}}"></text>
+                            </view>
+                            <view>
+                                <text class="{{array[1]?'yuan':''}}"></text>
+                            </view>
+                            <view>
+                                <text class="{{array[2]?'yuan':''}}"></text>
+                            </view>
+                            <view>
+                                <text class="{{array[3]?'yuan':''}}"></text>
+                            </view>
+                            <view>
+                                <text class="{{array[4]?'yuan':''}}"></text>
+                            </view>
+                            <view>
+                                <text class="{{array[5]?'yuan':''}}"></text>
+                            </view>
+
+                        </view>
+
+                    </view>
+
+                </view>
+            </view>
+
+            <view class="tcc_bottom">
+                <image src="../../resources/icons/bottom.png"></image>
+                <view class="num">
+                    <view class="col">
+                        <view hover-class="gra" hover-stay-time="100" bindtap="click">1</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">2</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">3</view>
+                    </view>
+                    <view class="col">
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">4</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">5</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">6</view>
+                    </view>
+                    <view class="col">
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">7</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">8</view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">9</view>
+                    </view>
+                    <view class="col">
+                        <view class="bg_none" hover-class="gra" hover-stay-time="100"></view>
+                        <view bindtap="click" hover-class="gra" hover-stay-time="100">0</view>
+                        <view hover-class="gra" class="bg_none" hover-stay-time="100" bindtap="del">X</view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Pay extends wepy.page {
+    config = {
+        'navigationBarTitleText': '支付',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        isshow: true,
+        array: [false, false, false, false, false, false],
+        imgUrl: ''
+    }
+
+    methods = {
+        show() {
+            this.isshow = true
+        },
+        click() {
+            var array = this.data.array;
+            if (array[4] === true) {
+                array[5] = true;
+                this.setData({
+                    array: array
+                })
+                wx.showLoading({
+                    title: '正在支付',
+                    success: function() {
+
+                    }
+                })
+                setTimeout(function() {
+                    wx.hideLoading()
+                    wx.showToast({
+                        title: '支付成功',
+                        icons: 'success',
+                    })
+                    setTimeout(function() {
+                        wx.redirectTo({
+                            url: 'index?tab=2'
+                        })
+                    }, 0)
+                }, 1000)
+                return;
+            }
+            for (var i = 0; i < array.length; i++) {
+                if (!array[i]) {
+                    array[i] = true;
+                    break;
+                }
+            }
+            this.setData({
+                array: array
+            })
+        },
+        del() {
+            var array = this.data.array;
+            for (var i = array.length; i >= 0; i--) {
+                if (array[i] == true) {
+                    array[i] = false;
+                    break;
+                }
+            }
+            this.setData({
+                array: array
+            })
+        },
+        gotoBagCar() {
+            wx.redirectTo({
+                url: 'index?tab=2'
+            })
+        }
+    }
+
+    onShow() {
+
+    }
+    onLoad() {
+        console.log('pay页面加载')
+        this.getUserImg()
+    }
+    getUserImg() {
+        let userImg = wx.getStorageSync('userInfo').avatarUrl
+        let imgUrl
+        if (typeof userImg === 'undefined') {
+            imgUrl = '../resources/icons/user.png'
+        } else {
+            imgUrl = userImg
+        }
+        this.imgUrl = imgUrl
+        this.$apply()
+    }
+
+}
+</script>

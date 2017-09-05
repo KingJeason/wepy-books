@@ -15,13 +15,18 @@ export default class extends wepy.app {
 
     config = {
         'pages': [
+            'pages/chart',
             'pages/index',
+            'pages/pay',
             'pages/query',
             'pages/appointment',
             'pages/bookList',
             'pages/bookDetail',
             'pages/editInfo',
-            'pages/lendRoom'
+            'pages/lendRoom',
+            'pages/collect',
+            'pages/message',
+            'pages/chat',
         ],
         'window': {
             'backgroundTextStyle': 'light',

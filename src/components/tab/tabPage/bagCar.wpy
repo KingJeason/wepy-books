@@ -101,6 +101,7 @@
                     justify-content: center;
                     align-items: flex-start;
                     box-sizing: border-box;
+                    position: relative;
                     text {
                         margin-bottom: 8rpx;
                     }
@@ -123,6 +124,13 @@
                         font-size: 34rpx;
                         color: red;
                     }
+                    .delete {
+                        width: 50rpx;
+                        height: 50rpx;
+                        position: absolute;
+                        top: calc(50% - 25rpx);
+                        right: 10rpx;
+                    }
                 }
             }
         }
@@ -136,21 +144,21 @@
 }
 
 .barCode {
-    position: absolute;
-    top: calc(50% - 25vh);
-    left: calc(50% - 40vw);
-    .barCodeWarp {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 90vh;
+    .pay {
+        align-self: flex-start;
     }
     image {
         width: 80vw;
         height: 50vh;
         margin-bottom: 20rpx;
+        margin-top: 40rpx;
     }
-    icon {}
 }
 </style>
 <template>
@@ -178,6 +186,7 @@
                                     <text>{{item.publish}}</text>
                                     <text>isbn: {{item.isbn}}</text>
                                     <text>¥ 20</text>
+                                    <image class="delete" src="../resources/icons/delete.png" @tap="deleteItem('{{item.bookId}}')"></image>
                                 </view>
                             </view>
                         </view>
@@ -199,10 +208,9 @@
             </view>
         </view>
         <view class="barCode" wx:if="{{barCode.show}}">
-            <view class="barCodeWarp">
-                <image src="{{barCode.url}}"></image>
-                <icon @tap="cancel" type="cancel" size="40" />
-            </view>
+            <button class="pay" @tap="pay">支付</button>
+            <image src="{{barCode.url}}"></image>
+            <icon @tap="cancel" type="cancel" size="40" />
         </view>
     </view>
 </template>
@@ -288,6 +296,56 @@ export default class Message extends wepy.component {
         },
         cancel() {
             this.onLoad()
+        },
+        pay() {
+            wx.redirectTo({
+                url: 'pay'
+            })
+        },
+        deleteItem(bookId) {
+            wx.showModal({
+                title: '提示',
+                content: '确认从购物车里删除?',
+                success: async (res) => {
+                    //  点击确定
+                    if (res.confirm) {
+                        await wepy.request({
+                            url: `${api.lendBook.deleteBooksFromCar.url}/${this.userId}/?book=${bookId}`,
+                            method: api.lendBook.deleteBooksFromCar.method
+                        })
+                        wx.showToast({
+                            title: '删除成功',
+                            icon: 'success',
+                            duration: 2000
+                        })
+                        this.onLoad()
+                    }
+                }
+            })
+            // wx.showModal({
+            //     title: '提示?',
+            //     content: '确认从购物车里删除?',
+            //     success: function(res) {
+            //         if (res.confirm) {
+            //             wx.request({
+            //                 url: 'https://www.learningwang.cn/books/deleteBooksFromCar/' + that.data.userid + '/?book=' + bookid,
+            //                 success: function(res) {
+            //                     console.log(res.data)
+            //                     that.setData({
+            //                         car: res.data.cart_Lend_BookCustoms
+            //                     })
+            //                     wx.showToast({
+            //                         title: '删除成功',
+            //                         icon: '../resources/icons/plus.png',
+            //                         duration: 2000
+            //                     })
+            //                 }
+            //             })
+            //         } else if (res.cancel) {
+            //             return;
+            //         }
+            //     }
+            // })
         }
     }
     mixins = [login]
