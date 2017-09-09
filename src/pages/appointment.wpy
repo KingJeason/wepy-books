@@ -5,12 +5,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    image{
+    image {
         width: 50%;
-       height: 100rpx;
-       margin-bottom: 20rpx;
+        height: 100rpx;
+        margin-bottom: 20rpx;
     }
-    text{
+    text {
         font-family: 'SimHei';
         font-size: 30rpx;
     }
@@ -116,38 +116,41 @@
 </style>
 <template>
     <view>
-        <view class="appointment">
+        <load wx:if="{{loadShow}}"/>
+        <view wx:if="{{!loadShow}}">
+            <view class="appointment">
 
-            <view class="wrap_rel" wx:if="{{count > 0}}">
-                <view class="rel_title">
-                    <text>我的预约</text>
-                    <view class="check">
-                        <text bindtap="CheckAll">全选</text>
-                        <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
-                    </view>
-                </view>
-                <block wx:for="{{books}}" wx:key="{{index}}">
-                    <view class="rel">
-                        <view class="rel-left">
-                            <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
-                            <view class="rel_info">
-                                <text>{{item.name}}</text>
-                                <text>预约日期: {{item.appointmentTime}}</text>
-                                <text>截止日期: {{item.cancelTime}} </text>
-                            </view>
+                <view class="wrap_rel" wx:if="{{count > 0}}">
+                    <view class="rel_title">
+                        <text>我的预约</text>
+                        <view class="check">
+                            <text bindtap="CheckAll">全选</text>
+                            <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
                         </view>
-
-                        <image src="{{item.imageurl}}"></image>
                     </view>
-                </block>
+                    <block wx:for="{{books}}" wx:key="{{index}}">
+                        <view class="rel">
+                            <view class="rel-left">
+                                <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
+                                <view class="rel_info">
+                                    <text>{{item.name}}</text>
+                                    <!-- <text>预约日期: {{item.appointmentTime}}</text>     -->
+                                    <text>截止日期: {{item.cancelTime}} </text>
+                                </view>
+                            </view>
+
+                            <image src="{{item.imageurl}}"></image>
+                        </view>
+                    </block>
+                </view>
+
+                <view class="cancel" bindtap="cancelOrder" wx:if="{{count > 0}}">取消预约</view>
+
             </view>
-
-            <view class="cancel" bindtap="cancelOrder" wx:if="{{count > 0}}">取消预约</view>
-
-        </view>
-        <view class="toptop" wx:if="{{count === 0}}">
-           <image src="../resources/images/book.jpg"></image>
-           <text>您还没有预约任何图书哦</text>
+            <view class="toptop" wx:if="{{count === 0}}">
+                <image src="../resources/images/book.jpg"></image>
+                <text>您还没有预约任何图书哦</text>
+            </view>
         </view>
 
     </view>
@@ -156,6 +159,7 @@
 <script>
 import wepy from 'wepy'
 import login from '../components/mixins/login'
+import load from '../components/load'
 import { api } from '../config'
 export default class appointment extends wepy.page {
     config = {
@@ -165,14 +169,15 @@ export default class appointment extends wepy.page {
     }
 
     components = {
-
+        load
     }
 
     data = {
         count: '',
         books: {},
         allCheck: false,
-        check: []
+        check: [],
+        loadShow: true
     }
     mixins = [login]
 
@@ -246,6 +251,7 @@ export default class appointment extends wepy.page {
         let fillArray = new Array(books.data.dataCount)
         this.check = fillArray.fill(false)
         this.books = array
+        this.loadShow = false
         this.$apply()
     }
     formatDate(date) {

@@ -57,6 +57,7 @@ export default class BookDetail extends wepy.page {
     }
 
     onShow() {
+        // this.$invoke('bookOperation',getUserInfo)
     }
     async onLoad(params) {
         try {
@@ -66,6 +67,10 @@ export default class BookDetail extends wepy.page {
                     'Content-Type': 'json'
                 },
             })
+            if(params.isbn === '9787115433145'){
+                params.id = 4086
+                params.typeId = 151
+            }
             this.$broadcast('bookData', book.data, params.id, params.typeId)
         } catch (error) {
             console.log('豆瓣出错')

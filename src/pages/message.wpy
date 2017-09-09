@@ -76,59 +76,63 @@
 </style>
 <template>
     <view>
-        <view class="tishi" wx:if="{{show}}">您当前没有任何动态哦~</view>
-        <view class="wrap_rel" wx:if="{{state.send}}">
-            <view class="rel_title">
-                <text>推送图书</text>
-                <text bindtap="gotomore">您想预约的图书已有库存!</text>
-            </view>
-            <block wx:for="{{book.sendBooks}}" wx:key="{{index}}">
-                <view class="rel">
-                    <button class="canle_msg" @tap="cancelMsg('{{item.id}}')">取消推送</button>
-                    <image src="{{item.imageurl}}"></image>
-                    <view class="rel_info">
-                        <text>{{item.name}}</text>
-                        <text>作者: {{item.author}}</text>
-                        <text>出版社: {{item.publish}} </text>
-                    </view>
+        <load wx:if="{{loadShow}}" />
+        <view wx:if="{{!loadShow}}">
+            <view class="tishi" wx:if="{{show}}">您当前没有任何动态哦~</view>
+            <view class="wrap_rel" wx:if="{{state.send}}">
+                <view class="rel_title">
+                    <text>推送图书</text>
+                    <text bindtap="gotomore">您想预约的图书已有库存!</text>
                 </view>
-            </block>
+                <block wx:for="{{book.sendBooks}}" wx:key="{{index}}">
+                    <view class="rel">
+                        <button class="canle_msg" @tap="cancelMsg('{{item.id}}')">取消推送</button>
+                        <image src="{{item.imageurl}}"></image>
+                        <view class="rel_info">
+                            <text>{{item.name}}</text>
+                            <text>作者: {{item.author}}</text>
+                            <text>出版社: {{item.publish}} </text>
+                        </view>
+                    </view>
+                </block>
+            </view>
+
+            <view class="wrap_rel" wx:if="{{state.recent}}">
+                <view class="rel_title">
+                    <text>即将到期图书</text>
+                    <text bindtap="gotomore">7日内要归还的图书!</text>
+                </view>
+                <block wx:for="{{book.recentBooks}}" wx:key="{{index}}">
+                    <view class="rel">
+                        <button class="canle_msg" @tap="reBorrow('{{item.id}}')">续借</button>
+                        <image src="{{item.imageurl}}"></image>
+                        <view class="rel_info">
+                            <text>{{item.name}}</text>
+                            <text>作者: {{item.author}}</text>
+                            <text>应还日期: {{item.shouldReturnTime}} </text>
+                        </view>
+                    </view>
+                </block>
+            </view>
+
+            <view class="wrap_rel" wx:if="{{state.out}}">
+                <view class="rel_title">
+                    <text>超期图书</text>
+                    <text bindtap="gotomore">超期{{}}</text>
+                </view>
+                <block wx:for="{{book.outBooks}}" wx:key="{{index}}">
+                    <view class="rel">
+                        <image src="{{item.imageurl}}"></image>
+                        <view class="rel_info">
+                            <text>{{item.name}}</text>
+                            <text>作者: {{item.author}}</text>
+                            <text>应还日期: {{item.shouldReturnTime}} </text>
+                        </view>
+                    </view>
+                </block>
+            </view>
         </view>
 
-        <view class="wrap_rel" wx:if="{{state.recent}}">
-            <view class="rel_title">
-                <text>即将到期图书</text>
-                <text bindtap="gotomore">7日内要归还的图书!</text>
-            </view>
-            <block wx:for="{{book.recentBooks}}" wx:key="{{index}}">
-                <view class="rel">
-                    <button class="canle_msg" @tap="reBorrow('{{item.id}}')">续借</button>
-                    <image src="{{item.imageurl}}"></image>
-                    <view class="rel_info">
-                        <text>{{item.name}}</text>
-                        <text>作者: {{item.author}}</text>
-                        <text>应还日期: {{item.shouldReturnTime}} </text>
-                    </view>
-                </view>
-            </block>
-        </view>
-
-        <view class="wrap_rel" wx:if="{{state.out}}">
-            <view class="rel_title">
-                <text>超期图书</text>
-                <text bindtap="gotomore">超期{{}}</text>
-            </view>
-            <block wx:for="{{book.outBooks}}" wx:key="{{index}}">
-                <view class="rel">
-                    <image src="{{item.imageurl}}"></image>
-                    <view class="rel_info">
-                        <text>{{item.name}}</text>
-                        <text>作者: {{item.author}}</text>
-                        <text>应还日期: {{item.shouldReturnTime}} </text>
-                    </view>
-                </view>
-            </block>
-        </view>
     </view>
 </template>
 
@@ -136,6 +140,7 @@
 import wepy from 'wepy'
 import { api } from '../config'
 import login from '../components/mixins/login'
+import load from '../components/load'
 export default class Collect extends wepy.page {
     config = {
         'navigationBarTitleText': '我的消息',
@@ -144,7 +149,7 @@ export default class Collect extends wepy.page {
     }
 
     components = {
-
+        load
     }
     computed = {
         show() {
@@ -161,7 +166,9 @@ export default class Collect extends wepy.page {
             send: false,
             recent: false,
             out: false
-        }
+        },
+        loadShow: true
+
 
     }
     mixins = [login]
@@ -222,9 +229,10 @@ export default class Collect extends wepy.page {
     }
     async onLoad() {
         await this.getStoreById()
-        this.getSendBooks()
-        this.getAllRecentOutDateBooks()
-        this.getAllOutDateBooks()
+        await this.getSendBooks()
+        await this.getAllRecentOutDateBooks()
+        await this.getAllOutDateBooks()
+        this.loadShow = false
         this.$apply()
     }
     // 获取推送

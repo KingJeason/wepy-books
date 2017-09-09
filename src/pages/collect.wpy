@@ -111,29 +111,32 @@ li:after {
 </style>
 <template>
     <view>
-        <view class="toptop" wx:if="{{collectBooks.datacount == 0}}">
-            <text>快去收藏图书吧~</text>
-        </view>
-        <view class="wrap" wx:if="{{collectBooks.datacount > 0}}">
-            <block wx:for="{{collectBooks.collectCustoms}}" wx:key="{{index}}">
-                <view class="jz" wx:if="{{index < collectBooks.collectCustoms.length/2}}">
-                    <view class="stage">
-                        <ul class="books-list">
-                            <li bindtap="gotodetail('{{collectBooks.collectCustoms[index*2].isbn}}','{{collectBooks.collectCustoms[index*2].typeId}}','{{collectBooks.collectCustoms[index*2].bid}}')">
-                                <image src="{{collectBooks.collectCustoms[index*2].imageurl}}">
-                                </image>
-                            </li>
-                            <li wx:if="{{collectBooks.collectCustoms[index*2+1].imageurl}}" bindtap="gotodetail('{{collectBooks.collectCustoms[index*2+1].isbn}}','{{collectBooks.collectCustoms[index*2+1].typeId}}','{{collectBooks.collectCustoms[index*2+1].bid}}')">
-                                <image src="{{collectBooks.collectCustoms[index*2+1].imageurl}}"></image>
-                            </li>
-                        </ul>
-                        <icon bindtap="delete_item" class="icon-1" data-fav_id="{{collectBooks.collectCustoms[index*2].id}}" type="cancel" size="16" color="{{item}}" wx:if="{{collectBooks.collectCustoms[index*2]}}" />
-                        <icon bindtap="delete_item" class="icon-2" data-fav_id="{{collectBooks.collectCustoms[index*2+1].id}}" type="cancel" size="16" color="{{item}}" wx:if="{{collectBooks.collectCustoms[index*2+1]}}" />
-                        <view class="desk"></view>
-                        <view class="desk-shadow"></view>
+       <load wx:if="{{loadShow}}"/>
+        <view>
+            <view class="toptop" wx:if="{{collectBooks.datacount == 0}}">
+                <text>快去收藏图书吧~</text>
+            </view>
+            <view class="wrap" wx:if="{{collectBooks.datacount > 0}}">
+                <block wx:for="{{collectBooks.collectCustoms}}" wx:key="{{index}}">
+                    <view class="jz" wx:if="{{index < collectBooks.collectCustoms.length/2}}">
+                        <view class="stage">
+                            <ul class="books-list">
+                                <li bindtap="gotodetail('{{collectBooks.collectCustoms[index*2].isbn}}','{{collectBooks.collectCustoms[index*2].typeId}}','{{collectBooks.collectCustoms[index*2].bid}}')">
+                                    <image src="{{collectBooks.collectCustoms[index*2].imageurl}}">
+                                    </image>
+                                </li>
+                                <li wx:if="{{collectBooks.collectCustoms[index*2+1].imageurl}}" bindtap="gotodetail('{{collectBooks.collectCustoms[index*2+1].isbn}}','{{collectBooks.collectCustoms[index*2+1].typeId}}','{{collectBooks.collectCustoms[index*2+1].bid}}')">
+                                    <image src="{{collectBooks.collectCustoms[index*2+1].imageurl}}"></image>
+                                </li>
+                            </ul>
+                            <icon bindtap="delete_item" class="icon-1" data-fav_id="{{collectBooks.collectCustoms[index*2].id}}" type="cancel" size="16" color="{{item}}" wx:if="{{collectBooks.collectCustoms[index*2]}}" />
+                            <icon bindtap="delete_item" class="icon-2" data-fav_id="{{collectBooks.collectCustoms[index*2+1].id}}" type="cancel" size="16" color="{{item}}" wx:if="{{collectBooks.collectCustoms[index*2+1]}}" />
+                            <view class="desk"></view>
+                            <view class="desk-shadow"></view>
+                        </view>
                     </view>
-                </view>
-            </block>
+                </block>
+            </view>
         </view>
     </view>
 </template>
@@ -142,6 +145,7 @@ li:after {
 import wepy from 'wepy'
 import { api } from '../config'
 import login from '../components/mixins/login'
+import load from '../components/load'
 export default class Collect extends wepy.page {
     config = {
         'navigationBarTitleText': '我的收藏',
@@ -150,11 +154,12 @@ export default class Collect extends wepy.page {
     }
 
     components = {
-
+        load
     }
 
     data = {
-        collectBooks: ''
+        collectBooks: '',
+        loadShow: true
     }
     mixins = [login]
 
@@ -198,6 +203,7 @@ export default class Collect extends wepy.page {
             method: api.collectBook.getCollectBook.method
         })
         this.collectBooks = collectBooks.data
+        this.loadShow = false
         this.$apply()
     }
     async onLoad() {

@@ -209,7 +209,7 @@
         </view>
         <view class="barCode" wx:if="{{barCode.show}}">
             <button class="pay" @tap="pay">支付</button>
-            <image src="{{barCode.url}}"></image>
+            <image src="{{barCode.url}}" bindload="hideLoading"></image>
             <icon @tap="cancel" type="cancel" size="40" />
         </view>
     </view>
@@ -292,6 +292,10 @@ export default class Message extends wepy.component {
 
             this.barCode.url = "http://qr.liantu.com/api.php?text=" + this.userId + "/?" + str + '!?' + str1
             this.barCode.show = true
+            wx.showLoading({
+                title: '正在生成二维码...',
+
+            })
             this.$apply()
         },
         cancel() {
@@ -301,6 +305,9 @@ export default class Message extends wepy.component {
             wx.redirectTo({
                 url: 'pay'
             })
+        },
+        hideLoading() {
+            wx.hideLoading()
         },
         deleteItem(bookId) {
             wx.showModal({

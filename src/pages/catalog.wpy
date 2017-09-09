@@ -1,0 +1,64 @@
+<style lang="scss">
+.gay {
+    padding: 40rpx;
+}
+
+.gay text {
+    font-family: 'SimHei';
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.header {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'SimHei'
+}
+</style>
+<template>
+    <view>
+        <view class="gay">
+            <view class="header">目录</view>
+            <text>
+                {{catalog}}
+            </text>
+
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import login from '../components/mixins/login'
+import { api } from '../config'
+export default class Catalog extends wepy.page {
+    config = {
+        'navigationBarTitleText': '目录',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        catalog: ''
+    }
+    mixins = [login]
+
+    methods = {
+    }
+    async onLoad(params) {
+        let res = await wepy.request({
+            url: 'https://api.douban.com/v2/book/isbn/' + params.isbn,
+            header: {
+                "Content-Type": "json"
+            }
+        })
+        this.catalog = res.data.catalog
+        this.$apply()
+    }
+
+}
+</script>

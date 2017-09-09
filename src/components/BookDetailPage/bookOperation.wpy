@@ -29,13 +29,13 @@
 <template>
     <view class="operation">
         <view class="box {{state.isCollect  ? ' active' : 'unactive'}}" @tap="collectBook">
-            收藏
+           {{state.isCollect ? '已收藏': '收藏'}}
         </view>
         <view class="box {{state.isInCar  ? ' active' : 'unactive'}}" @tap="lendBook">
             {{state.isInCar ? '已在书包' : '借阅'}}
         </view>
         <view class="box {{state.isAppoint  ? ' active' : 'unactive'}}" @tap="orderBook">
-            预约
+            {{state.isAppoint ? '已预约' : '预约'}}
         </view>
     </view>
 </template>
@@ -206,7 +206,7 @@ export default class bookOperation extends wepy.component {
                             }
                         })
                         wx.showToast({
-                            title: '成功收藏本书',
+                            title: '成功',
                             icon: 'success',
                             duration: 2000
                         })
@@ -253,8 +253,8 @@ export default class bookOperation extends wepy.component {
                 url: api.collectBook.isCollect.url,
                 method: api.collectBook.isCollect.method,
                 data: {
-                    userId: this.userId,
-                    bookId: this.bookId
+                    uid: this.userId,
+                    bid: this.bookId
                 }
             })
             let isInCar = await wepy.request({
@@ -274,7 +274,7 @@ export default class bookOperation extends wepy.component {
             this.state.isAppoint = isAppoint.data.issuccess
             this.$apply()
         } catch (error) {
-
+            console.log(error)
         }
     }
     // 是否注册

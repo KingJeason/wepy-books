@@ -15,7 +15,6 @@ export default class extends wepy.app {
 
     config = {
         'pages': [
-            'pages/chart',
             'pages/index',
             'pages/pay',
             'pages/query',
@@ -27,6 +26,9 @@ export default class extends wepy.app {
             'pages/collect',
             'pages/message',
             'pages/chat',
+            'pages/catalog',
+            'pages/author'
+
         ],
         'window': {
             'backgroundTextStyle': 'light',

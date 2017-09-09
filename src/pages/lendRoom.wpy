@@ -5,12 +5,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    image{
+    image {
         width: 50%;
-       height: 100rpx;
-       margin-bottom: 20rpx;
+        height: 100rpx;
+        margin-bottom: 20rpx;
     }
-    text{
+    text {
         font-family: 'SimHei';
         font-size: 30rpx;
     }
@@ -129,43 +129,46 @@
 </style>
 <template>
     <view>
-        <view class="lendRoom" wx:if="{{!barCode.show}}">
+        <load wx:if="{{loadShow}}" />
+        <view wx:if="{{!loadShow}}">
+            <view class="lendRoom" wx:if="{{!barCode.show}}">
 
-            <view class="wrap_rel" wx:if="{{count > 0}}">
-                <view class="rel_title">
-                    <text>我的借阅</text>
-                    <view class="check">
-                        <text bindtap="CheckAll">全选</text>
-                        <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
-                    </view>
-                </view>
-                <block wx:for="{{books}}" wx:key="{{index}}">
-                    <view class="rel">
-                        <view class="rel-left">
-                            <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
-                            <view class="rel_info">
-                                <text>{{item.name}}</text>
-                                <text>借阅日期: {{item.lendTime}}</text>
-                                <text>应还日期: {{item.shouldReturnTime}} </text>
-                            </view>
+                <view class="wrap_rel" wx:if="{{count > 0}}">
+                    <view class="rel_title">
+                        <text>我的借阅</text>
+                        <view class="check">
+                            <text bindtap="CheckAll">全选</text>
+                            <icon bindtap="CheckAll" type="success" color="{{allCheck?'#ff7700' :'lightgrey'}}" />
                         </view>
-
-                        <image src="{{item.imageurl}}"></image>
                     </view>
-                </block>
+                    <block wx:for="{{books}}" wx:key="{{index}}">
+                        <view class="rel">
+                            <view class="rel-left">
+                                <icon type="success" color="{{check[index]?'#ff7700':'lightgrey'}}" bindtap="CheckItem('{{index}}')" />
+                                <view class="rel_info">
+                                    <text>{{item.name}}</text>
+                                    <text>借阅日期: {{item.lendTime}}</text>
+                                    <text>应还日期: {{item.shouldReturnTime}} </text>
+                                </view>
+                            </view>
+
+                            <image src="{{item.imageurl}}"></image>
+                        </view>
+                    </block>
+                </view>
+
+                <view class="cancel" bindtap="returnBook" wx:if="{{count > 0}}">生成还书二维码</view>
+
+            </view>
+            <view class="toptop" wx:if="{{count === 0}}">
+                <image src="../resources/images/book.jpg"></image>
+                <text>您还没有借阅任何图书哦</text>
             </view>
 
-            <view class="cancel" bindtap="returnBook" wx:if="{{count > 0}}">生成还书二维码</view>
-
-        </view>
-       <view class="toptop" wx:if="{{count === 0}}">
-           <image src="../resources/images/book.jpg"></image>
-           <text>您还没有借阅任何图书哦</text>
-        </view>
-
-        <view class="barCode" wx:if="{{barCode.show}}">
-            <image src="{{barCode.url}}"></image>
-            <icon @tap="cancel" type="cancel" size="40" />
+            <view class="barCode" wx:if="{{barCode.show}}">
+                <image src="{{barCode.url}}" bindload="hideloading"></image>
+                <icon @tap="cancel" type="cancel" size="40" />
+            </view>
         </view>
 
     </view>
@@ -175,6 +178,7 @@
 import wepy from 'wepy'
 import { api } from '../config'
 import login from '../components/mixins/login'
+import load from '../components/load'
 export default class lendRoom extends wepy.page {
     config = {
         'navigationBarTitleText': '我的借阅',
@@ -183,6 +187,7 @@ export default class lendRoom extends wepy.page {
     }
 
     components = {
+        load
     }
     data = {
         books: [],
@@ -193,6 +198,7 @@ export default class lendRoom extends wepy.page {
             show: false,
             url: ''
         },
+        loadShow: true
 
     }
 
@@ -220,6 +226,10 @@ export default class lendRoom extends wepy.page {
             str = str3 + str + '!?' + str;
             this.barCode.url = str
             this.barCode.show = true
+            wx.showLoading({
+                title: '正在生成二维码...',
+
+            })
 
         },
         CheckAll() {
@@ -234,6 +244,9 @@ export default class lendRoom extends wepy.page {
         },
         cancel() {
             this.onLoad()
+        },
+        hideloading() {
+            wx.hideLoading()
         }
     }
     mixins = [login]
@@ -255,6 +268,7 @@ export default class lendRoom extends wepy.page {
         this.check = fillArray.fill(false)
         this.books = array
         this.barCode.show = false
+        this.loadShow = false
         this.$apply()
     }
     formatDate(date) {

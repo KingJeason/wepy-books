@@ -105,7 +105,7 @@
             white-space: normal;
             font-family: 'SimHei';
             box-shadow: 2px 2px 2px #696969;
-            border:2rpx solid lightgray
+            border: 2rpx solid lightgray
         }
         .abc {
             display: flex;
@@ -139,19 +139,19 @@
             <text>简介\n\n</text>
             <text>{{book.summary}}</text>
         </view>
-        <view bindtap="author_detail" class="author" wx:if="{{book.author_intro}}">
+        <view @tap="gotoAuthor" class="author" wx:if="{{book.author_intro}}">
             <text>作者简介\n\n</text>
             <view class="author-detail">
                 <text>{{book.author_intro}}</text>
-                <image src="../../resources/icons/right.png"></image>
+                <image src="../resources/icons/right.png"></image>
             </view>
 
         </view>
-        <view class="author" wx:if="{{book.catalog}}" bindtap="catalog_detail">
+        <view class="author" wx:if="{{book.catalog}}" @tap="gotocatalog">
             <text>目录\n\n</text>
             <view class="author-detail">
                 <text>{{book.catalog}}</text>
-                <image src="../../resources/icons/right.png"></image>
+                <image src="../resources/icons/right.png" ></image>
             </view>
         </view>
         <view class="wrap_rel" wx:if={{isShow}}>
@@ -171,7 +171,7 @@
             </view>
 
         </view>
-        <view class="bookview">
+        <view class="bookview" wx:if="{{noteShow}}">
             <text class="book-title">读书笔记</text>
             <scroll-view scroll-x="true">
                 <block wx:for="{{noteBook}}" wx:key="{{index}}">
@@ -204,13 +204,24 @@ export default class bookDetailInfo extends wepy.component {
         relevantBook: [],
         isShow: false,
         typeId: '',
-        noteBook: []
+        noteBook: [],
+        noteShow: false
 
     }
     methods = {
         gotoBookList() {
             wepy.navigateTo({
                 url: `bookList?typeId=${this.typeId}`
+            })
+        },
+        gotocatalog() {
+            wepy.navigateTo({
+                url: `catalog?isbn=` + this.book.isbn10
+            })
+        },
+        gotoAuthor() {
+            wepy.navigateTo({
+                url: 'author?isbn=' + this.book.isbn10
             })
         }
     }
@@ -229,6 +240,7 @@ export default class bookDetailInfo extends wepy.component {
                 this.$emit('loadComplete', true)
                 this.$apply()
             } catch (error) {
+                console.log(error)
                 console.log('相关图书出错')
             }
         }
@@ -249,7 +261,14 @@ export default class bookDetailInfo extends wepy.component {
                 "Content-Type": "json"
             }
         })
+        console.log(res)
+        if (res.data.annotations.length === 0) {
+            this.noteShow = false
+            this.$apply()
+            return false
+        }
         this.noteBook = res.data.annotations
+        this.noteShow = true
         this.$apply()
     }
     async onLoad() {

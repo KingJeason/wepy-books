@@ -1,0 +1,71 @@
+<style lang="scss">
+.gay {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.gay>text:first-child {
+    font-family: 'SimHei';
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.gay>text:nth-child(2) {
+    font-family: 'SimHei';
+    font-size: 12px;
+    line-height: 24px;
+}
+</style>
+<template>
+    <view>
+        <text>\n</text>
+        <text>\n</text>
+        <view class="gay">
+            <text>{{author}}</text>
+
+            <text>{{author_intro}}</text>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import login from '../components/mixins/login'
+import { api } from '../config'
+export default class Author extends wepy.page {
+    config = {
+        'navigationBarTitleText': '作者简介',
+        'navigationBarTextStyle': 'white',
+        'navigationBarBackgroundColor': '#ff7700'
+    }
+
+    components = {
+
+    }
+
+    data = {
+        author: '',
+        author_intro: ''
+
+    }
+    mixins = [login]
+
+    methods = {
+    }
+    async onLoad(params) {
+        let book = await wepy.request({
+            url: 'https://api.douban.com/v2/book/isbn/' + params.isbn,
+            header: {
+                'Content-Type': 'json'
+            },
+        })
+
+        this.author = book.data.author
+        this.author_intro = book.data.author_intro
+        this.$apply()
+    }
+
+}
+</script>

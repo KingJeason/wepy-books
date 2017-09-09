@@ -123,7 +123,7 @@ export default class rank extends wepy.component {
             })
             let hootBooksData = hootBooks.data.hotBooks
             hootBooksData.forEach((item, index) => {
-                item.topimgUrl = '../../resources/images/top' + (index + 1) + '.png'
+                item.topimgUrl = '../resources/images/top' + (index + 1) + '.png'
             })
             this.hootBooks = hootBooksData
             this.$emit('indexLoadComplete', true)

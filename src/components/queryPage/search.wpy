@@ -17,7 +17,7 @@
         .clear {
             position: absolute;
             right: 10px;
-            z-index: 99;
+            z-index: 999;
             bottom: calc(50% - 15px);
         }
     }
@@ -241,7 +241,7 @@
             </image>
             <view class="input">
                 <input type="text" @input="inputChange" value='{{inputValue}}' placeholder="请输入关键字/全拼/isbn" placeholder-style=" color:#666666;font-size: 13px;font-family: 'SimHei';text-align:center">
-                <icon wx:if="{{clearShow}}" @tap="clearInput" class="clear" type="clear" size="30" />
+                <!-- <icon wx:if="{{clearShow}}" @tap="clearInput" class="clear" type="clear" size="30" /> -->
             </view>
             <button @tap="queryBook">搜索</button>
         </view>
