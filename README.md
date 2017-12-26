@@ -13,7 +13,7 @@
 #### 搜索书籍
 ![Query](http://or9d9eqg0.bkt.clouddn.com/query.gif)
 #### 书籍详情
-![bookdetail](http://or9d9eqg0.bkt.clouddn.com/bookdetail.gif)
+![bookdetail](http://or9d9eqg0.bkt.clouddn.com/bookdetail1.gif)
 #### 书包(购物车)
 ![Bag](http://or9d9eqg0.bkt.clouddn.com/bag1.gif)
 #### 收藏,借阅,我的消息
