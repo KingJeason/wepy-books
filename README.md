@@ -7,21 +7,19 @@
 #### 主页展示(轮播图,借阅排名,今日推荐)
 ![Index](http://or9d9eqg0.bkt.clouddn.com/index.gif)
 #### 分类书籍
-![classify](http://or9d9eqg0.bkt.clouddn.com/classify.gif)
+![classify](http://or9d9eqg0.bkt.clouddn.com/classify1.gif)
 #### 个人中心
-![Me](http://or9d9eqg0.bkt.clouddn.com/me.gif)
+![Me](http://or9d9eqg0.bkt.clouddn.com/me1.gif)
 #### 搜索书籍
 ![Query](http://or9d9eqg0.bkt.clouddn.com/query.gif)
 #### 书籍详情
-![bookdetail](http://or9d9eqg0.bkt.clouddn.com/bookdetail.gif)
+![bookdetail](http://or9d9eqg0.bkt.clouddn.com/bookdetail1.gif)
 #### 书包(购物车)
 ![Bag](http://or9d9eqg0.bkt.clouddn.com/bag.gif)
 #### 收藏,借阅,我的消息
 ![Lend](http://or9d9eqg0.bkt.clouddn.com/lend.gif)
 #### 智能客服
 ![Robot](http://or9d9eqg0.bkt.clouddn.com/robot.gif)
-
-
 
 ## 体验步骤
 ### 1. 安装 wepy
