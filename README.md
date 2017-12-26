@@ -9,7 +9,7 @@
 #### 分类书籍
 ![classify](http://or9d9eqg0.bkt.clouddn.com/classify1.gif)
 #### 个人中心
-![Me](http://or9d9eqg0.bkt.clouddn.com/me1.gif)
+![Me](http://or9d9eqg0.bkt.clouddn.com/me2.gif)
 #### 搜索书籍
 ![Query](http://or9d9eqg0.bkt.clouddn.com/query.gif)
 #### 书籍详情
