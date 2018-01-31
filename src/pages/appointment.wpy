@@ -194,7 +194,7 @@ export default class appointment extends wepy.page {
         },
         cancelOrder() {
             let isCheck = this.check.some((item) => {
-                return item == true
+                return item === true
             })
             if (!isCheck) {
                 wx.showModal({
@@ -214,7 +214,7 @@ export default class appointment extends wepy.page {
                                 str += `&book=${this.books[i].bookId}`
                             }
                         }
-                        str = str.slice(1);
+                        str = str.slice(1)
                         try {
                             await wepy.request({
                                 url: `${api.appointBook.cancleAppointBooks.url}/${this.userId}/?${str}`,
@@ -255,8 +255,8 @@ export default class appointment extends wepy.page {
         this.$apply()
     }
     formatDate(date) {
-        let unixTimestamp = new Date(date);
-        return unixTimestamp.toLocaleString();
+        let unixTimestamp = new Date(date)
+        return unixTimestamp.toLocaleString()
     }
 
 }

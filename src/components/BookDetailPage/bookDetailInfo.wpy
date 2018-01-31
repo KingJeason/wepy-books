@@ -258,7 +258,7 @@ export default class bookDetailInfo extends wepy.component {
         let res = await wepy.request({
             url: `https://api.douban.com/v2/book/${id}/annotations`,
             header: {
-                "Content-Type": "json"
+                'Content-Type': 'json'
             }
         })
         console.log(res)

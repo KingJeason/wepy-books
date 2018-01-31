@@ -285,9 +285,9 @@ export default class Pay extends wepy.page {
             this.isshow = true
         },
         click() {
-            var array = this.data.array;
+            var array = this.data.array
             if (array[4] === true) {
-                array[5] = true;
+                array[5] = true
                 this.setData({
                     array: array
                 })
@@ -309,12 +309,12 @@ export default class Pay extends wepy.page {
                         })
                     }, 0)
                 }, 1000)
-                return;
+                return
             }
             for (var i = 0; i < array.length; i++) {
                 if (!array[i]) {
-                    array[i] = true;
-                    break;
+                    array[i] = true
+                    break
                 }
             }
             this.setData({
@@ -322,11 +322,11 @@ export default class Pay extends wepy.page {
             })
         },
         del() {
-            var array = this.data.array;
+            var array = this.data.array
             for (var i = array.length; i >= 0; i--) {
-                if (array[i] == true) {
-                    array[i] = false;
-                    break;
+                if (array[i] === true) {
+                    array[i] = false
+                    break
                 }
             }
             this.setData({
