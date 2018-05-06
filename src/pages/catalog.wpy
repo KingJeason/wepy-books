@@ -30,7 +30,7 @@
 <script>
 import wepy from 'wepy'
 import login from '../components/mixins/login'
-import { api } from '../config'
+// import { api } from '../config'
 export default class Catalog extends wepy.page {
     config = {
         'navigationBarTitleText': '目录',
@@ -53,7 +53,7 @@ export default class Catalog extends wepy.page {
         let res = await wepy.request({
             url: 'https://api.douban.com/v2/book/isbn/' + params.isbn,
             header: {
-                "Content-Type": "json"
+                'Content-Type': 'json'
             }
         })
         this.catalog = res.data.catalog

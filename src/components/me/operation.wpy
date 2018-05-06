@@ -91,7 +91,7 @@ export default class operation extends wepy.component {
     }
     watch = {
         count(newValue, oldValue) {
-            if(newValue > 0){
+            if (newValue > 0) {
                 let com = this.$root.$com.index.$com.search
 
                 this.$invoke(com, 'RemindToShow')
@@ -108,7 +108,7 @@ export default class operation extends wepy.component {
         console.log('me-operation')
     }
     // 获取推送
-    async  getSendBooks() {
+    async getSendBooks() {
         let books = await wepy.request({
             url: `${api.message.getSendBooks.url}/${this.userId}`,
             method: api.message.getSendBooks.method

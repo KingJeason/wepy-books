@@ -67,7 +67,7 @@ export default class BookDetail extends wepy.page {
                     'Content-Type': 'json'
                 },
             })
-            if(params.isbn === '9787115433145'){
+            if (params.isbn === '9787115433145') {
                 params.id = 4086
                 params.typeId = 151
             }

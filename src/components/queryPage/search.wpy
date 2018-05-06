@@ -376,8 +376,6 @@ export default class search extends wepy.component {
                     }
                 }
             })
-
-
         }
 
     }

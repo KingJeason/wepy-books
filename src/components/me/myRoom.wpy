@@ -178,7 +178,6 @@ export default class myRoom extends wepy.component {
                 method: api.lendBook.getLendBooks.method
             })
 
-
             // 藏书
             let collectBooks = await wepy.request({
                 url: api.collectBook.getCollectBook.url + this.userId,

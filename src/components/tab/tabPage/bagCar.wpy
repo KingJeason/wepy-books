@@ -234,8 +234,6 @@ export default class Message extends wepy.component {
             show: false,
             url: ''
         },
-
-
     }
     methods = {
         CheckAll() {
@@ -274,8 +272,8 @@ export default class Message extends wepy.component {
             this.check.forEach((item, index) => {
                 if (item) {
                     str += '$book=' + this.carBooks[index].bookId + '$costmoney=' + '20'
-                    str1 += "$book=" + this.carBooks[index].bookId
-                    checkNum += 1;
+                    str1 += '$book=' + this.carBooks[index].bookId
+                    checkNum += 1
                 }
             })
             str = str.slice(1)
@@ -290,7 +288,7 @@ export default class Message extends wepy.component {
                 return false
             }
 
-            this.barCode.url = "http://qr.liantu.com/api.php?text=" + this.userId + "/?" + str + '!?' + str1
+            this.barCode.url = 'http://qr.liantu.com/api.php?text=' + this.userId + '/?' + str + '!?' + str1
             this.barCode.show = true
             wx.showLoading({
                 title: '正在生成二维码...',
@@ -382,7 +380,7 @@ export default class Message extends wepy.component {
             this.barCode.show = false
             this.$apply()
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
         console.log('bagCar')
     }

@@ -33,7 +33,7 @@
 <script>
 import wepy from 'wepy'
 import login from '../components/mixins/login'
-import { api } from '../config'
+// import { api } from '../config'
 export default class Author extends wepy.page {
     config = {
         'navigationBarTitleText': '作者简介',

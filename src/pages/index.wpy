@@ -60,12 +60,12 @@ export default class Index extends wepy.page {
 
     onShow() {
         console.log('index show')
-        this.$invoke('bagcar','onLoad')
-        this.$invoke('me/userInfo','onLoad')
-        this.$invoke('me/myRoom','onLoad')
+        this.$invoke('bagcar', 'onLoad')
+        this.$invoke('me/userInfo', 'onLoad')
+        this.$invoke('me/myRoom', 'onLoad')
     }
     onLoad(params) {
-        if(typeof params.tab !== 'undefined'){
+        if (typeof params.tab !== 'undefined') {
             this.currentTab = params.tab
         }
         console.log('index页面加载')

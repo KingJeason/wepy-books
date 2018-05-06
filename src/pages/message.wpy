@@ -168,8 +168,6 @@ export default class Collect extends wepy.page {
             out: false
         },
         loadShow: true
-
-
     }
     mixins = [login]
 
@@ -195,8 +193,6 @@ export default class Collect extends wepy.page {
                         } catch (error) {
 
                         }
-
-
                     }
                 }
             })
@@ -236,7 +232,7 @@ export default class Collect extends wepy.page {
         this.$apply()
     }
     // 获取推送
-    async  getSendBooks() {
+    async getSendBooks() {
         let sendBooks = await wepy.request({
             url: `${api.message.getSendBooks.url}/${this.userId}`,
             method: api.message.getSendBooks.method
@@ -287,9 +283,8 @@ export default class Collect extends wepy.page {
         this.$apply()
     }
     formatDate(date) {
-        let unixTimestamp = new Date(date);
-        return unixTimestamp.toLocaleString();
+        let unixTimestamp = new Date(date)
+        return unixTimestamp.toLocaleString()
     }
-
 }
 </script>

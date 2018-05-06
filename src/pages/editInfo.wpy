@@ -181,8 +181,6 @@ export default class EditInfo extends wepy.page {
     }
     async onLoad() {
         try {
-
-
             let userId = await wepy.getStorage({
                 key: 'userId'
             })
