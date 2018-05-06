@@ -30,7 +30,7 @@ npm install wepy-cli -g
 
 ### 2. 下载源代码
 ```bash
-git clone git@github.com:KingJeason/wepy-books.git
+git clone https://github.com/KingJeason/wepy-books.git
 ```
 
 ### 3. 安装开发依赖
